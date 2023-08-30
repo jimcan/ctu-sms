@@ -17,3 +17,7 @@ export function getInitials(name: string) {
 
 	return initials === '' ? undefined : initials;
 }
+
+export function modulo(n: number, m: number) {
+	return ((n % m) + m) % m;
+}

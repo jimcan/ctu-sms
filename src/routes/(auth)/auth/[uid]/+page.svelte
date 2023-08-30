@@ -83,19 +83,6 @@
 		>
 			<div class="flex flex-col items-center p-8 gap-2 h-full justify-center">
 				<div class="flex relative">
-					<!-- {#if student?.photoUrl}
-						<div class="avatar">
-							<div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-								<img src={student?.photoUrl} alt="" />
-							</div>
-						</div>
-					{:else}
-						<div class="avatar placeholder">
-							<div class="bg-neutral-focus text-neutral-content rounded-full w-24">
-								<span class="text-4xl font-bold">{getInitials(student?.name ?? '') ?? 'NN'}</span>
-							</div>
-						</div>
-					{/if} -->
 					<Avatar {student} size="4xl" outline="accent" />
 					<UpdateAvatar photoUrl={student?.photoUrl} />
 				</div>
@@ -205,12 +192,12 @@
 					</div>
 				</div>
 				<div class="flex w-full gap-4 justify-evenly">
-					<a href="/" class="btn btn-ghost" on:click={() => (editing = !editing)}>
+					<a href="/" class="btn btn-ghost sm:btn-md btn-sm" on:click={() => (editing = !editing)}>
 						<ChevronsLeft size={18} /> Home
 					</a>
 					<button
 						type="button"
-						class="btn btn-ghost"
+						class="btn btn-ghost sm:btn-md btn-sm"
 						on:click={() => {
 							if (editing) reset();
 							editing = !editing;
@@ -222,7 +209,7 @@
 							<PenSquare size={18} /> Update
 						{/if}
 					</button>
-					<button class="btn btn-accent" disabled={!editing || $appState.loading}>
+					<button class="btn btn-accent sm:btn-md btn-sm" disabled={!editing || $appState.loading}>
 						{#if $appState.loading}
 							<Save size={18} /> Saving <span class="loading loading-dots loading-md" />
 						{:else}
