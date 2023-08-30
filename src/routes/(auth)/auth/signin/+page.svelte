@@ -4,7 +4,6 @@
 
 	console.log('auth/signin');
 	console.error('This is not an error');
-	signinWithGoogle();
 
 	const onSignin = async () => {
 		console.log('signing in...');
