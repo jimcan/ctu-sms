@@ -3,6 +3,8 @@
 	import { appState, setLoading, setState } from '$lib/stores/app-state';
 
 	const onSignin = async () => {
+		console.log('signing in...');
+
 		setLoading(true);
 		const error = await signinWithGoogle();
 		console.log(error);
