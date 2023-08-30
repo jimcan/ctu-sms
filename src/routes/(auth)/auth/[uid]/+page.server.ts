@@ -11,6 +11,4 @@ export const load = (async ({
 	return { userSession, student, subjects, sections };
 }) satisfies PageServerLoad;
 
-export const actions: Actions = {
-	default: () => {}
-};
+export const actions: Actions = {};

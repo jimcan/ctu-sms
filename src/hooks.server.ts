@@ -33,21 +33,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (secsErr) event.locals.appError = secsErr;
 	if (subsErr) event.locals.appError = subsErr;
 
-	console.error(error);
-	console.error(secsErr);
-	console.error(subsErr);
-	console.log(sections);
-	console.log(subjects);
-	console.log(decodedToken);
-
-	console.log({
-		error,
-		secsErr,
-		subjects,
-		sections,
-		subsErr,
-		decodedToken
-	});
-
 	return await resolve(event);
 };

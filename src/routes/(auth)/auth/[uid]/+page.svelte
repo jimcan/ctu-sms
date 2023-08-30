@@ -7,7 +7,6 @@
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
 	import { updateStudent, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
-	import { getInitials } from '$lib/utils.js';
 	import Avatar from '$lib/components/Avatar.svelte';
 
 	export let data;

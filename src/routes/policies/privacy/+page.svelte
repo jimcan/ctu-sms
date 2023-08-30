@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterNavigate, goto } from '$app/navigation';
+	import { afterNavigate } from '$app/navigation';
 	import { ChevronsLeft } from 'lucide-svelte';
 
 	let prevPage = '/';

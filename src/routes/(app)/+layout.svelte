@@ -5,7 +5,6 @@
 	import {
 		AlertTriangle,
 		CheckCircle2,
-		Home,
 		Info,
 		LogIn,
 		LogOut,

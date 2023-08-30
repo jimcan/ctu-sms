@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/stores';
-	import { ChevronsLeft, ChevronsRight } from 'lucide-svelte';
+	import { ChevronsLeft } from 'lucide-svelte';
 </script>
 
 <div class="flex items-center justify-center min-h-screen">

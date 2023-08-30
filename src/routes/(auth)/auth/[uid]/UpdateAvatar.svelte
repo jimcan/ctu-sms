@@ -24,9 +24,9 @@
 				const reader = new FileReader();
 
 				reader.addEventListener('load', async () => {
-					const result = reader.result!.toString();
+					const result = reader.result?.toString();
 
-					image.setAttribute('src', result);
+					image.setAttribute('src', result ?? '');
 				});
 				reader.readAsDataURL(imgFile);
 			}
@@ -41,8 +41,11 @@
 			if (error) console.log(error);
 
 			if (url) {
-				const err = await updateStudent($page.data.userSession?.uid!, { photoUrl: url });
-				if (err) console.log(err);
+				const uid = $page.data.userSession?.uid;
+				if (uid) {
+					const err = await updateStudent(uid, { photoUrl: url });
+					if (err) console.log(err);
+				}
 			}
 		}
 
