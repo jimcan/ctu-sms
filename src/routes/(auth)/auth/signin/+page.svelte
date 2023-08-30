@@ -5,6 +5,8 @@
 	const onSignin = async () => {
 		setLoading(true);
 		const error = await signinWithGoogle();
+		console.log(error);
+
 		if (error) setState(error);
 	};
 </script>
