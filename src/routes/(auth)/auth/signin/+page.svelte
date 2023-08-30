@@ -2,6 +2,9 @@
 	import { signinWithGoogle } from '$lib/services/client';
 	import { appState, setLoading, setState } from '$lib/stores/app-state';
 
+	console.log('auth/signin');
+	console.error('This is not an error');
+
 	const onSignin = async () => {
 		console.log('signing in...');
 
