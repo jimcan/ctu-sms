@@ -2,6 +2,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { signOut } from '$lib/services/client';
 	import { appState, clearState } from '$lib/stores/app-state.js';
+	import { cn } from '$lib/utils.js';
 	import {
 		AlertTriangle,
 		CheckCircle2,
@@ -97,7 +98,15 @@
 						<Avatar student={data.student ?? undefined} outline="accent" />
 					</button>
 					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-					<ul tabindex="0" class="dropdown-content bg-base-200 py-2 mt-4 min-w-[150px] rounded-md">
+					<ul
+						tabindex="0"
+						class={cn(
+							'dropdown-content',
+							'bg-base-200 shadow-lg',
+							'py-2 mt-4 min-w-[150px]',
+							'rounded-md z-10'
+						)}
+					>
 						<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
 							<a href="/auth" class="w-full flex items-center gap-2">
 								{#if data.student}

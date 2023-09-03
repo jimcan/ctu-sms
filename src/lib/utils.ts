@@ -1,4 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
+import dayjs from 'dayjs';
+import type { Timestamp } from 'firebase/firestore';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -20,4 +22,8 @@ export function getInitials(name: string) {
 
 export function modulo(n: number, m: number) {
 	return ((n % m) + m) % m;
+}
+
+export function getAttendanceToView(all: Attendance[], date: Date) {
+	return all.filter((a) => dayjs(a.time.toDate()).isSame(date, 'day'));
 }

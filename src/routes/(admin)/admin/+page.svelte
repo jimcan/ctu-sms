@@ -1,12 +1,13 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { sections } from '$lib/stores/sections';
+	import { students } from '$lib/stores/students';
+	import { subjects } from '$lib/stores/subjects';
 	import { FileText, Users2 } from 'lucide-svelte';
 
-	export let data;
-
-	$: students = data.students?.slice(0, 3);
-	$: sections = data.sections?.slice(0, 3);
-	$: subjects = data.subjects?.slice(0, 3);
+	$: threeStudents = $students?.slice(0, 3);
+	$: threeSections = $sections?.slice(0, 3);
+	$: threeSubjects = $subjects?.slice(0, 3);
 </script>
 
 <div class="grid md:grid-cols-2 p-4 md:p-8 gap-4 md:gap-8">
@@ -16,9 +17,9 @@
 	>
 		<h4 class="text-xl font-semibold">Students</h4>
 		<div class="divider" />
-		{#if students}
+		{#if threeStudents}
 			<div class="flex flex-col gap-4">
-				{#each students as student}
+				{#each threeStudents as student}
 					<div class="flex items-center gap-4">
 						<Avatar {student} outline="accent" />
 						<p class="text-lg font-semibold">{student.name}</p>
@@ -34,7 +35,7 @@
 		<h4 class="text-xl font-semibold">Sections</h4>
 		<div class="divider" />
 		<div class="flex flex-col gap-4">
-			{#each sections as section}
+			{#each threeSections as section}
 				<div class="flex items-center gap-4">
 					<Users2 />
 					<p class="text-lg font-semibold">{section.name}</p>
@@ -49,7 +50,7 @@
 		<h4 class="text-xl font-semibold">Subjects</h4>
 		<div class="divider" />
 		<div class="flex flex-col gap-4">
-			{#each subjects as subject}
+			{#each threeSubjects as subject}
 				<div class="flex items-center gap-4">
 					<FileText />
 					<p class="text-lg font-semibold">{subject.codeName}</p>

@@ -129,7 +129,7 @@
 					</span>
 					<input
 						type="number"
-						class="input w-full pl-12 pr-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+						class="input w-full pl-12 pr-12"
 						name="idNumber"
 						placeholder="ID Number"
 						bind:value={idNumber}

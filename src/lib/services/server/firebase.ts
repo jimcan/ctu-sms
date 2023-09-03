@@ -61,6 +61,48 @@ export async function exists(collection: string, uid: string): Promise<boolean |
 	}
 }
 
+export async function studentsBySection(
+	section?: string | null
+): Promise<{ docs?: Student[]; error?: AppError }> {
+	try {
+		const { db } = initFirebaseAdmin();
+
+		const query = section
+			? db.collection('students').where('sectionCode', '==', section)
+			: db.collection('students');
+
+		const snapshot = await query.get();
+
+		const docs: Student[] = snapshot.docs.map((d) => ({ uid: d.id, ...d.data() } as Student));
+		return { docs };
+	} catch (e) {
+		return { error: handleError(e) };
+	}
+}
+
+export const studentsCollection = () => {
+	const { db } = initFirebaseAdmin();
+	return db.collection('students');
+};
+
+export const studentsSnapshots = () => {
+	const { db } = initFirebaseAdmin();
+	let students: Student[] = [];
+	db.collection('students').onSnapshot((s) => {
+		students = s.docs.map((d) => ({ ...d.data(), uid: d.id } as Student));
+	});
+
+	return students;
+};
+
+export const hasChanges = () => {
+	const { db } = initFirebaseAdmin();
+	let students: Student[] = [];
+	db.collection('students').onSnapshot((s) => {
+		return !!s.docChanges().length;
+	});
+};
+
 export async function getDocsAsAdmin<T>(
 	collection: string
 ): Promise<{ docs?: T[]; error?: AppError }> {

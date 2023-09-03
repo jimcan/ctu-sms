@@ -15,10 +15,12 @@
 <div class={cn('overflow-hidden', fontSize)}>
 	<div class="relative" style="transform: translate(0, {100 * offset}%)">
 		<span class={cn(cls, 'absolute -top-full select-none')} aria-hidden="true">
-			{Math.floor($count + 1)}
+			{Math.floor($count + 1)
+				.toString()
+				.padStart(2, '0')}
 		</span>
 		<span class={cls}>
-			{Math.floor($count)}
+			{Math.floor($count).toString().padStart(2, '0')}
 		</span>
 	</div>
 </div>

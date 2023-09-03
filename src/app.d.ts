@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 declare global {
 	namespace App {
 		// interface Error {}
@@ -7,6 +9,7 @@ declare global {
 			sections: Section[];
 			subjects: Subject[];
 			student: Student | null;
+			students: Student[] | null;
 		}
 		interface PageData {
 			userSession?: UserSession | null;
@@ -52,14 +55,21 @@ declare global {
 	}
 
 	interface Student {
-		uid?: string;
+		uid: string;
 		idNumber?: number;
 		name?: string;
 		photoUrl?: string;
 		sectionCode?: string;
-		subjectCodes?: string[];
-		attendanceIds?: string[];
-		scoreIds?: string[];
+		subjectCodes: string[];
+		attendanceIds: string[];
+		scoreIds: string[];
+	}
+
+	interface Attendance {
+		uid: string;
+		time: Timestamp;
+		log: 'in' | 'out';
+		owner: string;
 	}
 }
 

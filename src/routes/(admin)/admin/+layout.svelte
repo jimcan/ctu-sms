@@ -22,7 +22,7 @@
 <div class="drawer lg:drawer-open">
 	<input id="admin-drawer" bind:checked type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col">
-		<div class="w-full navbar bg-base-300">
+		<div class="w-full max-w-[100dvw] navbar bg-base-300 border-b border-base-content">
 			<div class="flex-none lg:hidden">
 				<label for="admin-drawer" class="btn btn-square btn-ghost">
 					<Menu />
@@ -30,7 +30,6 @@
 			</div>
 			<AdminNav />
 		</div>
-		<!-- Page content here -->
 		<slot />
 	</div>
 	<div class="drawer-side">

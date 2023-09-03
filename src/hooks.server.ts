@@ -17,7 +17,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.userSession = { uid, name, email, admin: email === 'jimcan051592@gmail.com' };
 
 		if (!(await exists('students', uid))) {
-			await saveAsAdmin<Student>('students', uid, { name, photoUrl: picture });
+			await saveAsAdmin<Partial<Student>>('students', uid, { name, photoUrl: picture });
 		}
 
 		const { doc: student, error: studentErr } = await getDocAsAdmin<Student>('students', uid);
