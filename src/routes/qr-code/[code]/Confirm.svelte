@@ -3,6 +3,7 @@
 	import { getAttendanceStore } from '$lib/stores/attendance';
 	import dayjs from 'dayjs';
 	import { Timestamp } from 'firebase/firestore';
+	import { onMount } from 'svelte';
 
 	export let uid: string;
 	export let subject: string;
@@ -12,7 +13,7 @@
 	let done = false;
 	let busy = false;
 
-	if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+	$: if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 		done = true;
 	}
 
@@ -29,7 +30,11 @@
 		busy = false;
 	}
 
-	$: !done && saveAttendance();
+	onMount(async () => {
+		if (!done) {
+			await saveAttendance();
+		}
+	});
 </script>
 
 {#if done}
