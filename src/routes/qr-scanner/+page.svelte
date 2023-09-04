@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { afterNavigate, goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { Html5Qrcode } from 'html5-qrcode';
 	import { X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
@@ -33,8 +34,8 @@
 	}
 
 	function onScanSuccess(decodedText: any, decodedResult: any) {
-		alert(`Code matched = ${decodedText}`);
-		console.log(decodedResult);
+		const link = `${decodedText}&uid=${$page.data.userSession?.uid}`;
+		goto(link);
 	}
 
 	function onScanFailure(error: any) {
