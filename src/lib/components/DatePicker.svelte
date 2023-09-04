@@ -2,7 +2,7 @@
 	import dayjs from 'dayjs';
 	import { SkipBack, SkipForward } from 'lucide-svelte';
 	import { cn } from '$lib/utils';
-	import RollingDigit from '../../routes/(app)/RollingDigit.svelte';
+	import RollingDigit from './RollingDigit.svelte';
 	import type { ChangeEventHandler } from 'svelte/elements';
 
 	let dateInput: HTMLInputElement;

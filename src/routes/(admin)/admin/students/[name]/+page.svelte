@@ -2,9 +2,14 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import DatePicker from '$lib/components/DatePicker.svelte';
+	import { saveDocument } from '$lib/services/client/firebase/db';
+	import { getAttendanceStore } from '$lib/stores/attendance';
 	import { students as studentsStore } from '$lib/stores/students';
-	import { cn } from '$lib/utils';
+	import { subjects as subjectsStore } from '$lib/stores/subjects';
+	import { cn, getAttendanceToView } from '$lib/utils';
 	import type { Dayjs } from 'dayjs';
+	import dayjs from 'dayjs';
+	import { Timestamp } from 'firebase/firestore';
 	import { SkipBack, SkipForward } from 'lucide-svelte';
 
 	let section = $page.url.searchParams.get('section');
@@ -14,6 +19,13 @@
 	$: currentStudentIndex = student ? students.indexOf(student) : 0;
 	$: prevStudent = currentStudentIndex > 0 ? students.at(currentStudentIndex - 1) : undefined;
 	$: nextStudent = students.at(currentStudentIndex + 1);
+
+	let date: Dayjs;
+
+	$: attendanceStore = getAttendanceStore(student?.uid ?? '');
+	$: attendanceToView = getAttendanceToView($attendanceStore, date?.toDate());
+	$: subjects = $subjectsStore;
+	$: subject = subjects[0];
 
 	function onPrev() {
 		if (prevStudent) {
@@ -31,9 +43,15 @@
 		}
 	}
 
-	let date: Dayjs;
-
-	$: console.log(date?.toString());
+	async function onAttendance() {
+		if (student?.uid) {
+			await saveDocument<Attendance>('attendance', {
+				for: 'in',
+				owner: student?.uid,
+				time: Timestamp.fromDate(new Date())
+			});
+		}
+	}
 </script>
 
 <div class="flex flex-col w-full max-w-[100dvw] p-4">
@@ -64,38 +82,32 @@
 	>
 		<h4 class="font-semibold mb-2">Attendance</h4>
 		<div class="flex flex-col sm:flex-row gap-2">
-			<button class="btn">Present</button>
-			<button class="btn">Excuse</button>
-			<input type="text" class="input input-bordered" placeholder="Reason" />
-		</div>
-	</div>
-	<div
-		class={cn(
-			'flex flex-col',
-			'bg-base-100',
-			'p-2 mt-2',
-			'border border-base-200 rounded-lg',
-			'hover:drop-shadow-[0_0_4px_#3d98ff]'
-		)}
-	>
-		<h4 class="font-semibold mb-2">Score</h4>
-		<div class="flex flex-col sm:flex-row gap-2">
 			<select class="select select-bordered">
-				<option value="midterm">Midterm</option>
-				<option value="final">Final</option>
+				{#each subjects ?? [] as sub}
+					<option value={sub.uid}>{sub.codeName}</option>
+				{/each}
 			</select>
-			<div class="flex gap-2">
-				<select class="select select-bordered">
-					<option value="quiz">Quiz</option>
-					<option value="assignment">Assignment</option>
-					<option value="exam">Exam</option>
-					<option value="participation">Participation</option>
-					<option value="project">Project</option>
-				</select>
-				<input type="number" class="input input-bordered w-full" />
-			</div>
+			<button class="btn" on:click={onAttendance}>Present</button>
+
 			<button class="btn">Excuse</button>
 			<input type="text" class="input input-bordered" placeholder="Reason" />
 		</div>
 	</div>
+	{#each attendanceToView as attendance}
+		<div
+			class={cn(
+				'flex flex-col',
+				'bg-base-100',
+				'p-2 mt-2',
+				'border border-base-200 rounded-lg',
+				'hover:drop-shadow-[0_0_4px_#3d98ff]'
+			)}
+		>
+			<h4 class="font-semibold mb-2">Attendance</h4>
+			<div class="flex flex-col sm:flex-row gap-2">
+				<h2>Time:</h2>
+				<p>{dayjs(attendance.time.toDate()).format('HH:mm A')}</p>
+			</div>
+		</div>
+	{/each}
 </div>

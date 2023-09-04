@@ -46,7 +46,7 @@ declare global {
 		uid?: string;
 		codeName: string;
 		title: string;
-		description?: string;
+		description?: string | null;
 	}
 
 	interface Section {
@@ -66,9 +66,9 @@ declare global {
 	}
 
 	interface Attendance {
-		uid: string;
+		uid?: string;
 		time: Timestamp;
-		log: 'in' | 'out';
+		for: string;
 		owner: string;
 	}
 }

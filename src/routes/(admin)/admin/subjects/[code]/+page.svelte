@@ -9,7 +9,7 @@
 	let code = '';
 	let codeName = '';
 	let title = '';
-	let description: string | undefined;
+	let description: string | undefined | null;
 
 	let codeInput: HTMLInputElement;
 	let nameInput: HTMLInputElement;
@@ -35,7 +35,12 @@
 	});
 
 	async function onSave() {
-		await saveDocument<Subject>('subjects', { uid: code, codeName, title, description });
+		await saveDocument<Subject>('subjects', {
+			uid: code,
+			codeName,
+			title,
+			description: description ?? null
+		});
 		goto(prevPath);
 	}
 </script>
