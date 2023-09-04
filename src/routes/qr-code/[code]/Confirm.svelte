@@ -13,10 +13,6 @@
 	let done = false;
 	let busy = false;
 
-	$: if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
-		done = true;
-	}
-
 	async function saveAttendance() {
 		if (done) return;
 		busy = true;
@@ -31,7 +27,10 @@
 	}
 
 	onMount(async () => {
-		if (!done) {
+		setTimeout(() => {}, 100);
+		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+			done = true;
+		} else {
 			await saveAttendance();
 		}
 	});

@@ -16,10 +16,12 @@
 </script>
 
 <div class="flex items-center justify-center p-4 min-h-[100dvh]">
-	{#if valid && uid && subject}
-		<Confirm {uid} {subject} />
-	{:else}
-		<p>The QR Code is invalid</p>
-	{/if}
-	<a href="/" class="btn"><ChevronsLeft size={18} /> Back</a>
+	<div class="flex flex-col">
+		{#if valid && uid && subject}
+			<Confirm {uid} {subject} />
+		{:else}
+			<p>The QR Code is invalid</p>
+		{/if}
+		<a href="{$page.url.origin}/" class="btn"><ChevronsLeft size={18} /> Back</a>
+	</div>
 </div>
