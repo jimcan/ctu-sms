@@ -9,3 +9,6 @@
 <p>{code}</p>
 <p>{subject}</p>
 <p>{uid}</p>
+{#if !uid}
+	<p>Please use the CTU SMS scanner</p>
+{/if}
