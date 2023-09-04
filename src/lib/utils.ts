@@ -27,3 +27,12 @@ export function modulo(n: number, m: number) {
 export function getAttendanceToView(all: Attendance[], date: Date) {
 	return all.filter((a) => dayjs(a.time.toDate()).isSame(date, 'day'));
 }
+
+export async function hash(text: string) {
+	const encoder = new TextEncoder();
+	const data = encoder.encode(text);
+
+	const buffer = await crypto.subtle.digest('SHA-1', data);
+	const hashArray = Array.from(new Uint8Array(buffer));
+	return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
