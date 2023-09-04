@@ -11,7 +11,8 @@ import {
 	updateDoc,
 	where,
 	setDoc,
-	addDoc
+	addDoc,
+	getDoc
 } from 'firebase/firestore';
 import { db } from './config';
 import { handleError } from '$lib/services/utils';
@@ -219,4 +220,10 @@ export async function saveDocument<T extends AnyObject>(col: string, data: T) {
 	} else {
 		await addDoc(colRef, data);
 	}
+}
+
+export async function getDocument<T extends AnyObject>(col: string, uid: string): Promise<T> {
+	const docRef = doc(db, col, uid);
+	const d = await getDoc(docRef);
+	return { ...d.data(), uid: d.id } as unknown as T;
 }

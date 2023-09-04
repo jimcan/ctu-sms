@@ -42,3 +42,7 @@ export async function isValid(code: string) {
 	const now = dayjs().format('YYYY-MM-DD');
 	return (await hash(now)) === code;
 }
+
+export function displayDate(date: Date, format: string = 'YYYY-MM-DD') {
+	return dayjs(date).format(format);
+}

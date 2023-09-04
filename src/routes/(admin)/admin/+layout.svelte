@@ -1,14 +1,21 @@
-<script>
+<script lang="ts">
 	import { signOut } from '$lib/services/client';
 	import { setLoading, setState } from '$lib/stores/app-state';
 	import { FileText, GanttChart, Home, LayoutDashboard, LogOut, Menu, Users2 } from 'lucide-svelte';
 	import { NavListTile, Avatar, AdminNav } from '$lib/components';
+	import { onMount } from 'svelte';
+	import { getDocument } from '$lib/services/client/firebase/db.js';
 
 	export let data;
 
-	$: student = data.student;
-
+	let student: Student | null | undefined;
 	let checked = false;
+
+	onMount(async () => {
+		if (data.userSession) {
+			student = await getDocument<Student>('students', data.userSession.uid);
+		}
+	});
 
 	async function onSignOut() {
 		setLoading(true);

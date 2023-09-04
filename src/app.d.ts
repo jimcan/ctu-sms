@@ -5,11 +5,6 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			userSession: UserSession | null;
-			appError: AppError | null;
-			sections: Section[];
-			subjects: Subject[];
-			student: Student | null;
-			students: Student[] | null;
 		}
 		interface PageData {
 			userSession?: UserSession | null;

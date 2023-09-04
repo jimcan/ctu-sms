@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { signOut } from '$lib/services/client';
+	import { getDocument } from '$lib/services/client/firebase/db.js';
 	import { appState, clearState } from '$lib/stores/app-state.js';
 	import { cn } from '$lib/utils.js';
 	import {
@@ -14,8 +15,19 @@
 		X,
 		XCircle
 	} from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
+
+	const isAdmin = data.userSession?.admin;
+
+	let student: Student | null | undefined;
+
+	onMount(async () => {
+		if (data.userSession) {
+			student = await getDocument<Student>('students', data.userSession?.uid);
+		}
+	});
 </script>
 
 <div class="flex flex-col min-h-[100dvh]">
@@ -77,25 +89,25 @@
 			<div class="navbar-end pr-2 sm:pr-6 xl:pr-0">
 				<div class="lg:flex items-center hidden gap-2">
 					<div class="menu menu-horizontal">
-						{#if data.isAdmin}
+						{#if isAdmin}
 							<a class="btn" href="/admin"><UserCog2 size={18} /> Admin</a>
 						{/if}
 						<a class="btn" href="/auth">
-							{#if data.student}
+							{#if student}
 								<LogIn size={18} /> Account
 							{:else}
 								<Users2 size={18} /> Sign in
 							{/if}
 						</a>
-						{#if data.student}
+						{#if student}
 							<a href="/" on:click={signOut} class="btn"><LogOut size={18} /> Sign out</a>
 						{/if}
 					</div>
-					<Avatar student={data.student ?? undefined} size="sm" outline="accent" />
+					<Avatar student={student ?? undefined} size="sm" outline="accent" />
 				</div>
 				<div class="dropdown dropdown-end lg:hidden">
 					<button class="btn btn-ghost btn-circle">
-						<Avatar student={data.student ?? undefined} outline="accent" />
+						<Avatar student={student ?? undefined} outline="accent" />
 					</button>
 					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 					<ul
@@ -109,14 +121,14 @@
 					>
 						<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
 							<a href="/auth" class="w-full flex items-center gap-2">
-								{#if data.student}
+								{#if student}
 									<LogIn size={18} /> Account
 								{:else}
 									<Users2 size={18} /> Sign in
 								{/if}
 							</a>
 						</li>
-						{#if data.student}
+						{#if student}
 							<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
 								<a href="/" on:click={signOut} class="w-full flex items-center gap-2">
 									<LogOut size={18} /> Sign out
@@ -124,7 +136,7 @@
 							</li>
 						{/if}
 
-						{#if data.isAdmin}
+						{#if isAdmin}
 							<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
 								<a href="/admin" class="w-full flex items-center gap-2">
 									<UserCog2 size={18} /> Admin
