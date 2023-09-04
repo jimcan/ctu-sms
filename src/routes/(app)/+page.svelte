@@ -4,6 +4,7 @@
 	import { DatePicker } from '$lib/components';
 	import { getAttendanceStore } from '$lib/stores/attendance.js';
 	import QrScanner from '$lib/components/QRScanner.svelte';
+	import { subjects } from '$lib/stores/subjects.js';
 
 	export let data;
 

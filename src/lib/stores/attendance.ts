@@ -3,7 +3,7 @@ import { db } from '$lib/services/client';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { readable } from 'svelte/store';
 
-export const getAttendanceStore = (owner: string) =>
+export const getAttendanceStore = (owner: string, subject?: string) =>
 	readable<Attendance[]>([], (set) => {
 		let dbUnsub: () => void;
 		let unsubbed = false;
@@ -11,20 +11,27 @@ export const getAttendanceStore = (owner: string) =>
 		if (browser) {
 			if (unsubbed) return;
 
-			dbUnsub = onSnapshot(
-				query(collection(db, 'attendance'), where('owner', '==', owner)),
-				(snapshot) => {
-					if (snapshot.empty) {
-						dbUnsub();
-					}
+			let q = query(collection(db, 'attendance'), where('owner', '==', owner));
 
-					return set(
-						snapshot.docs.map((d) => {
-							return { uid: d.id, ...d.data() } as Attendance;
-						})
-					);
+			if (subject) {
+				q = query(
+					collection(db, 'attendance'),
+					where('owner', '==', owner),
+					where('for', '==', subject)
+				);
+			}
+
+			dbUnsub = onSnapshot(q, (snapshot) => {
+				if (snapshot.empty) {
+					dbUnsub();
 				}
-			);
+
+				return set(
+					snapshot.docs.map((d) => {
+						return { uid: d.id, ...d.data() } as Attendance;
+					})
+				);
+			});
 		}
 
 		return () => {

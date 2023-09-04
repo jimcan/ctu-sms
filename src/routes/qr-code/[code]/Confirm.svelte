@@ -3,17 +3,18 @@
 	import { getAttendanceStore } from '$lib/stores/attendance';
 	import dayjs from 'dayjs';
 	import { Timestamp } from 'firebase/firestore';
-	import { onMount } from 'svelte';
 
 	export let uid: string;
 	export let subject: string;
 
-	const attendanceStore = getAttendanceStore(uid);
+	const attendanceStore = getAttendanceStore(uid, subject);
 
 	let done = false;
 	let busy = false;
 
 	async function saveAttendance() {
+		if (done) return;
+		busy = true;
 		const a: Attendance = {
 			for: subject,
 			owner: uid,
@@ -21,17 +22,16 @@
 		};
 
 		await saveDocument<Attendance>('attendance', a);
+		busy = false;
 	}
 
-	onMount(async () => {
+	$: {
 		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 			done = true;
 		} else {
-			busy = true;
-			await saveAttendance();
-			busy = false;
+			saveAttendance();
 		}
-	});
+	}
 </script>
 
 {#if done}
