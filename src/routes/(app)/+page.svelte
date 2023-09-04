@@ -27,6 +27,7 @@
 		<DatePicker bind:selected={date} />
 		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 			<a href="/qr-scanner" class="btn">Scan Attendance</a>
+			<a href="/qr-code" class="btn">QR Codes</a>
 			<div
 				class={cn(
 					'flex flex-col',

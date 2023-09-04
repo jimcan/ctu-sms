@@ -2,7 +2,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { Html5Qrcode } from 'html5-qrcode';
 	import { X } from 'lucide-svelte';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	let busy = false;
 	let html5Qrcode: Html5Qrcode;
