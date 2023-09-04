@@ -36,3 +36,9 @@ export async function hash(text: string) {
 	const hashArray = Array.from(new Uint8Array(buffer));
 	return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
+
+export async function isValid(code: string) {
+	if (!code) return false;
+	const now = dayjs().format('YYYY-MM-DD');
+	return (await hash(now)) === code;
+}

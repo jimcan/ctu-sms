@@ -2,18 +2,24 @@
 	import Confirm from './Confirm.svelte';
 
 	import { page } from '$app/stores';
-	import { getAttendanceStore } from '$lib/stores/attendance';
+	import { isValid } from '$lib/utils';
+	import { onMount } from 'svelte';
+	import { ChevronsLeft } from 'lucide-svelte';
 
 	const code = $page.params.code;
 	const subject = $page.url.searchParams.get('subject');
 	const uid = $page.url.searchParams.get('uid');
+
+	let valid = false;
+
+	onMount(async () => (valid = await isValid(code)));
 </script>
 
-<p>{code}</p>
-<p>{subject}</p>
-<p>{uid}</p>
-{#if uid && subject}
-	<Confirm {uid} {subject} />
-{:else}
-	<p>Please use the CTU SMS scanner</p>
-{/if}
+<div class="flex items-center justify-center p-4 min-h-[100dvh]">
+	{#if valid && uid && subject}
+		<Confirm {uid} {subject} />
+	{:else}
+		<p>The QR Code is invalid</p>
+	{/if}
+	<a href="/" class="btn"><ChevronsLeft size={18} /> Back</a>
+</div>
