@@ -24,9 +24,7 @@
 					<tr>
 						<th />
 						<th>Code</th>
-						<th>Code Name</th>
 						<th>Title</th>
-						<th>Description</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -35,16 +33,14 @@
 						<tr class="hover">
 							<th>{i + 1}</th>
 							<td>{subject.uid}</td>
-							<td>{subject.codeName}</td>
 							<td>{subject.title}</td>
-							<td>{subject.description}</td>
 							<td class="join">
-								<a href="/admin/subjects/{subject.codeName}" class="btn btn-sm join-item">
+								<a href="/admin/subjects/{subject.uid}" class="btn btn-sm join-item">
 									<PenSquare size={18} />
 								</a>
 								<ConfirmDialog
-									title="Delete '{subject.codeName}'?"
-									message="Are you sure you want to delete this subject '{subject.codeName}'"
+									title="Delete '{subject.uid}'?"
+									message="Are you sure you want to delete this subject '{subject.uid}'"
 									on:click={() => onDelete(subject.uid)}
 								/>
 							</td>

@@ -15,6 +15,8 @@
 	let busy = false;
 	let attendance: Attendance | undefined;
 
+	$: console.log(attendances);
+
 	async function saveAttendance() {
 		if (attendances.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 			return (done = true);

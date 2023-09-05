@@ -4,3 +4,4 @@ export { default as ConfirmDialog } from './ConfirmDialog.svelte';
 export { default as DatePicker } from './DatePicker.svelte';
 export { default as NavListTile } from './NavListTile.svelte';
 export { default as RollingDigit } from './RollingDigit.svelte';
+export { default as Theme } from './Theme.svelte';

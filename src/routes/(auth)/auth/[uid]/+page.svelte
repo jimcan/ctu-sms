@@ -166,12 +166,9 @@
 
 								<div class="collapse rounded-md collapse-arrow">
 									<input type="checkbox" />
-									<div class="collapse-title">{subject.codeName}</div>
+									<div class="collapse-title">{subject.uid}</div>
 									<div class="collapse-content">
 										<p>{subject.title}</p>
-										{#if subject.description}
-											<p>{subject.description}</p>
-										{/if}
 									</div>
 								</div>
 							</div>

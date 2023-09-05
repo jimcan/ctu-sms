@@ -11,7 +11,7 @@
 	$: attendanceToView = getAttendanceToView($attendanceStore, dayjs().toDate());
 
 	function getSubjectName(code: string) {
-		return $subjects.find((s) => s.uid === code)?.codeName;
+		return $subjects.find((s) => s.uid === code)?.uid;
 	}
 </script>
 

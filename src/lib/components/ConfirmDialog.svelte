@@ -15,9 +15,8 @@
 		<h3 class="font-bold text-lg">{title}</h3>
 		<p class="py-4">{message}</p>
 		<div class="modal-action">
-			<!-- if there is a button in form, it will close the modal -->
 			<button class="btn btn-ghost">Cancel</button>
-			<button class="btn btn-accent" type="button" on:click>Delete</button>
+			<button class="btn btn-accent" on:click>Delete</button>
 		</div>
 	</form>
 </dialog>

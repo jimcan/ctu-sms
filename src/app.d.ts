@@ -39,9 +39,7 @@ declare global {
 
 	interface Subject {
 		uid?: string;
-		codeName: string;
 		title: string;
-		description?: string | null;
 	}
 
 	interface Section {

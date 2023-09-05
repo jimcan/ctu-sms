@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Theme } from '$lib/components';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { signOut } from '$lib/services/client';
 	import { appState, clearState } from '$lib/stores/app-state.js';
@@ -98,6 +99,7 @@
 					</div>
 					<Avatar student={student ?? undefined} size="sm" outline="accent" />
 				</div>
+				<Theme />
 				<div class="dropdown dropdown-end lg:hidden">
 					<button class="btn btn-ghost btn-circle">
 						<Avatar student={student ?? undefined} outline="accent" />

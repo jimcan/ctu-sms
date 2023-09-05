@@ -1,8 +1,10 @@
 import { decodeToken, exists, saveAsAdmin } from '$lib/services/server';
+import { themes } from '$lib/themes';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const token = event.cookies.get('token') || '';
+	const theme = event.cookies.get('theme');
 	const { decodedToken } = await decodeToken(token);
 
 	if (decodedToken) {
@@ -19,5 +21,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	return await resolve(event);
+	if (!theme || !themes.includes(theme)) {
+		return await resolve(event);
+	}
+
+	return await resolve(event, {
+		transformPageChunk: ({ html }) => {
+			return html.replace('data-theme=""', `data-theme="${theme}"`);
+		}
+	});
 };
