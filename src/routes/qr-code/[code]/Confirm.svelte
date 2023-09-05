@@ -30,8 +30,10 @@
 		busy = false;
 	}
 
-	onMount(async () => {
-		await saveAttendance();
+	onMount(() => {
+		setTimeout(async () => {
+			await saveAttendance();
+		}, 100);
 	});
 </script>
 
