@@ -7,6 +7,7 @@
 	export let uid: string;
 
 	const attendanceStore = getAttendanceStore(uid);
+
 	$: attendanceToView = getAttendanceToView($attendanceStore, dayjs().toDate());
 
 	function getSubjectName(code: string) {
