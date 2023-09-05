@@ -22,6 +22,6 @@
 		{:else}
 			<p>The QR Code is invalid</p>
 		{/if}
-		<a href="{$page.url.origin}/" class="btn"><ChevronsLeft size={18} /> Back</a>
+		<a href={$page.url.origin} class="btn"><ChevronsLeft size={18} /> Back</a>
 	</div>
 </div>

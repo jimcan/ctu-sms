@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { enhance } from '$app/forms';
 	import type { ChangeEventHandler } from 'svelte/elements.js';
-	import type { SubmitFunction } from './$types.js';
 	import { appState, setLoading, setState } from '$lib/stores/app-state';
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
-	import { updateStudent, signOut } from '$lib/services/client';
+	import { updateDocument, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { sections as sectionsStore, subjects as subjectsStore } from '$lib/stores';
+	import { getStudentStore } from '$lib/stores/students';
 
 	export let data;
 
 	setLoading(false);
 
-	$: sections = data.sections;
-	$: subjects = data.subjects;
-	$: student = data.student;
+	const studentStore = getStudentStore(data.userSession.uid);
+
+	$: student = $studentStore;
+	let sections = $sectionsStore;
+	let subjects = $subjectsStore;
 
 	let name = '';
 	let idNumber = '';
@@ -26,33 +27,26 @@
 
 	let editing = false;
 
-	onMount(() => {
-		reset();
-	});
+	$: student && setInitialValues();
 
-	const reset = () => {
+	const setInitialValues = () => {
 		name = student?.name ?? '';
 		idNumber = student?.idNumber?.toString() ?? '';
 		sectionCode = student?.sectionCode ?? '';
 		subjectCodes = student?.subjectCodes ?? [];
 	};
 
-	const handleSubmit: SubmitFunction = async () => {
+	const handleSubmit = async () => {
 		setLoading(true);
-		const err = await updateStudent(data.userSession.uid, {
+		const err = await updateDocument<Student>('students', data.userSession.uid, {
 			name,
 			idNumber: Number(idNumber),
 			sectionCode,
 			subjectCodes
 		});
 
-		if (err) console.log(err);
-
-		return async ({ update }) => {
-			await update({ reset: false });
-			editing = false;
-			setLoading(false);
-		};
+		editing = false;
+		setLoading(false);
 	};
 
 	const handleSubjectSelect: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -84,7 +78,7 @@
 			<div class="flex flex-col items-center p-8 gap-2 h-full justify-center">
 				<div class="flex relative">
 					<Avatar {student} size="4xl" outline="accent" />
-					<UpdateAvatar photoUrl={student?.photoUrl} />
+					<UpdateAvatar photoUrl={student?.photoUrl} imgName="{sectionCode}/{name}" />
 				</div>
 				<p class="md text-lg text-center">{data.userSession.email}</p>
 				<button class="btn btn-outline" on:click={onSignOut}><LogOut size={18} /> Sign out</button>
@@ -93,11 +87,7 @@
 		<div
 			class="flex flex-col bg-base-300 p-6 rounded-none rounded-b-lg md:rounded-none md:rounded-r-lg items-center h-full justify-center"
 		>
-			<form
-				class="flex flex-col w-full items-center gap-4"
-				method="post"
-				use:enhance={handleSubmit}
-			>
+			<form class="flex flex-col w-full items-center gap-4">
 				<div class="flex relative w-full">
 					<span class="absolute left-4 inset-y-0 z-10 flex items-center justify-center">
 						<Baseline size={18} />
@@ -199,7 +189,7 @@
 						type="button"
 						class="btn btn-ghost sm:btn-md btn-sm"
 						on:click={() => {
-							if (editing) reset();
+							if (editing) setInitialValues();
 							editing = !editing;
 						}}
 					>
@@ -209,7 +199,11 @@
 							<PenSquare size={18} /> Update
 						{/if}
 					</button>
-					<button class="btn btn-accent sm:btn-md btn-sm" disabled={!editing || $appState.loading}>
+					<button
+						class="btn btn-accent sm:btn-md btn-sm"
+						disabled={!editing || $appState.loading}
+						on:click={handleSubmit}
+					>
 						{#if $appState.loading}
 							<Save size={18} /> Saving <span class="loading loading-dots loading-md" />
 						{:else}

@@ -4,7 +4,7 @@ import { handleError } from '$lib/services/utils';
 
 export async function upload(file: File) {
 	try {
-		const fileRef = ref(storage, file.name);
+		const fileRef = ref(storage, `avatars/${file.name}`);
 		await uploadBytes(fileRef, file);
 		const url = await getDownloadURL(fileRef);
 		return { url };

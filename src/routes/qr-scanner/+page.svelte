@@ -33,7 +33,7 @@
 		busy = false;
 	}
 
-	function onScanSuccess(decodedText: any, decodedResult: any) {
+	function onScanSuccess(decodedText: any) {
 		const link = `${decodedText}&uid=${$page.data.userSession?.uid}`;
 		goto(link);
 	}

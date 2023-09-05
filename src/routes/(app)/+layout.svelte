@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { signOut } from '$lib/services/client';
-	import { getDocument } from '$lib/services/client/firebase/db.js';
 	import { appState, clearState } from '$lib/stores/app-state.js';
+	import { getStudentStore } from '$lib/stores/students.js';
 	import { cn } from '$lib/utils.js';
 	import {
 		AlertTriangle,
@@ -15,19 +15,12 @@
 		X,
 		XCircle
 	} from 'lucide-svelte';
-	import { onMount } from 'svelte';
 
 	export let data;
 
 	const isAdmin = data.userSession?.admin;
-
-	let student: Student | null | undefined;
-
-	onMount(async () => {
-		if (data.userSession) {
-			student = await getDocument<Student>('students', data.userSession?.uid);
-		}
-	});
+	$: studentStore = data.userSession && getStudentStore(data.userSession?.uid);
+	$: student = $studentStore;
 </script>
 
 <div class="flex flex-col min-h-[100dvh]">

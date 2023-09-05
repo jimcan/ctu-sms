@@ -45,5 +45,6 @@
 		</select>
 
 		<img src="" alt="" class="max-w-lg w-full rounded-lg" bind:this={qrcode} />
+		<a href="/" class="btn w-full max-w-xs">Back</a>
 	</div>
 </div>

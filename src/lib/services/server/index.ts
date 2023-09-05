@@ -1,1 +1,1 @@
-export { decodeToken, exists, getDocAsAdmin, getDocsAsAdmin, saveAsAdmin } from './firebase';
+export { decodeToken, exists, saveAsAdmin } from './firebase';

@@ -3,8 +3,8 @@ import { db } from '$lib/services/client';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { readable } from 'svelte/store';
 
-export const getAttendanceStore = (owner: string, subject?: string) =>
-	readable<Attendance[]>([], (set) => {
+export function getAttendanceStore(owner: string, subject?: string) {
+	return readable<Attendance[]>([], (set) => {
 		let dbUnsub: () => void;
 		let unsubbed = false;
 
@@ -39,3 +39,4 @@ export const getAttendanceStore = (owner: string, subject?: string) =>
 			if (dbUnsub) dbUnsub();
 		};
 	});
+}

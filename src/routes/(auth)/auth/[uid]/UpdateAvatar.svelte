@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { enhance } from '$app/forms';
 	import { Pen, Save, X } from 'lucide-svelte';
-	import { upload, updateStudent } from '$lib/services/client';
+	import { upload, updateDocument } from '$lib/services/client';
 	import { appState, setLoading } from '$lib/stores/app-state';
-	import type { SubmitFunction } from './$types';
 
 	export let photoUrl = '';
+	export let imgName = '';
 
 	setLoading(false);
 
@@ -33,27 +32,26 @@
 		}
 	}
 
-	const onUpload: SubmitFunction = async () => {
+	const onUpload = async () => {
 		setLoading(true);
 
 		if (imgFile) {
+			const filename = `${imgName}.${imgFile.type.split('/')[1]}`;
+			imgFile = new File([imgFile], filename, { type: imgFile.type });
 			const { url, error } = await upload(imgFile);
 			if (error) console.log(error);
 
 			if (url) {
 				const uid = $page.data.userSession?.uid;
 				if (uid) {
-					const err = await updateStudent(uid, { photoUrl: url });
+					const err = await updateDocument<Student>('students', uid, { photoUrl: url });
 					if (err) console.log(err);
 				}
 			}
 		}
 
-		return async ({ update }) => {
-			await update();
-			setLoading(false);
-			dialog.close();
-		};
+		setLoading(false);
+		dialog.close();
 	};
 </script>
 
@@ -64,7 +62,7 @@
 	<Pen size={18} />
 </button>
 <dialog bind:this={dialog} class="modal">
-	<form class="modal-box max-w-max" method="post" use:enhance={onUpload}>
+	<form class="modal-box max-w-max">
 		<h3 class="font-bold text-lg mb-8">Update Avatar</h3>
 		<div class="flex flex-col gap-4 items-center">
 			<div class="avatar">
@@ -84,7 +82,7 @@
 			<button class="btn btn-ghost" type="button" on:click={() => dialog.close()}>
 				<X size={18} /> Close
 			</button>
-			<button disabled={$appState.loading} class="btn btn-accent">
+			<button disabled={$appState.loading} class="btn btn-accent" on:click={onUpload}>
 				{#if $appState.loading}
 					<Save size={18} /> Saving <span class="loading loading-dots loading-md" />
 				{:else}

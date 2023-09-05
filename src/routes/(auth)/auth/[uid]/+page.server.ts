@@ -1,14 +1,9 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
-export const load = (async ({
-	locals: { userSession, student, subjects, sections },
-	params: { uid }
-}) => {
+export const load = (async ({ locals: { userSession }, params: { uid } }) => {
 	if (!userSession) throw redirect(303, '/auth');
 	if (userSession.uid !== uid) throw error(404, 'Not Found');
 
-	return { userSession, student, subjects, sections };
+	return { userSession };
 }) satisfies PageServerLoad;
-
-export const actions: Actions = {};

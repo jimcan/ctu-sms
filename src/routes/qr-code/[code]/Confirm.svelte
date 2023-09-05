@@ -10,7 +10,7 @@
 
 	const attendanceStore = getAttendanceStore(uid, subject);
 
-	$: attendances = $attendanceStore;
+	$: hasAttendances = $attendanceStore.length > 0;
 
 	let done = false;
 	let busy = false;
@@ -29,10 +29,12 @@
 	}
 
 	onMount(async () => {
-		if (attendances.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
-			done = true;
-		} else {
-			await saveAttendance();
+		if (hasAttendances) {
+			if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+				done = true;
+			} else {
+				await saveAttendance();
+			}
 		}
 	});
 </script>
