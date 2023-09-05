@@ -10,41 +10,41 @@
 
 	const attendanceStore = getAttendanceStore(uid, subject);
 
-	$: hasAttendances = $attendanceStore.length > 0;
-
 	let done = false;
 	let busy = false;
+	let attendance: Attendance | undefined;
 
 	async function saveAttendance() {
-		if (done) return;
+		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+			return (done = true);
+		}
+
 		busy = true;
-		const a: Attendance = {
+		attendance = {
 			for: subject,
 			owner: uid,
 			time: Timestamp.fromDate(new Date())
 		};
 
-		await saveDocument<Attendance>('attendance', a);
+		await saveDocument<Attendance>('attendance', attendance);
 		busy = false;
 	}
 
 	onMount(async () => {
-		if (hasAttendances) {
-			if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
-				done = true;
-			} else {
-				await saveAttendance();
-			}
-		}
+		await saveAttendance();
 	});
 </script>
 
 {#if done}
-	<p>You're already present for todays class</p>
+	<p>You've already scanned this Attendance QR.</p>
 {:else if busy}
 	<span>
-		Saving <div class="loading loading-dots loading-md" />
+		Saving attendance <div class="loading loading-dots loading-md" />
 	</span>
 {:else}
-	<span>Success</span>
+	<div class="flex flex-col gap-2">
+		<h4 class="text-success italic">Attendance saved!</h4>
+		<p><strong>Subject :</strong> {attendance?.for}</p>
+		<p><strong>Time :</strong> {dayjs(attendance?.time.toDate()).format('HH:mm A')}</p>
+	</div>
 {/if}

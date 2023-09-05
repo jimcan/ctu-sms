@@ -7,6 +7,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { sections as sectionsStore, subjects as subjectsStore } from '$lib/stores';
 	import { getStudentStore } from '$lib/stores/students';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -14,19 +15,15 @@
 
 	const studentStore = getStudentStore(data.userSession.uid);
 
-	$: student = $studentStore;
 	let sections = $sectionsStore;
 	let subjects = $subjectsStore;
-
 	let name = '';
 	let idNumber = '';
 	let sectionCode = '';
 	let subjectCodes: string[] = [];
-
-	$: inSubjectCodes = (uid: string) => subjectCodes?.includes(uid);
-
 	let editing = false;
 
+	$: student = $studentStore;
 	$: student && setInitialValues();
 
 	const setInitialValues = () => {
@@ -38,7 +35,7 @@
 
 	const handleSubmit = async () => {
 		setLoading(true);
-		const err = await updateDocument<Student>('students', data.userSession.uid, {
+		await updateDocument<Student>('students', data.userSession.uid, {
 			name,
 			idNumber: Number(idNumber),
 			sectionCode,
@@ -154,14 +151,14 @@
 					</select>
 				</div>
 				<div class={`rounded-lg p-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
-					<p class="p-2">Select Subject/s</p>
+					<p class="p-2">Subjects</p>
 					<div class="">
 						{#each subjects as subject}
 							<div class="flex">
 								<input
 									type="checkbox"
 									disabled={!editing}
-									checked={inSubjectCodes(subject.uid ?? '')}
+									checked={subjectCodes.includes(subject.uid ?? '')}
 									value={subject.uid}
 									class="checkbox checkbox-sm mt-4"
 									on:change={handleSubjectSelect}

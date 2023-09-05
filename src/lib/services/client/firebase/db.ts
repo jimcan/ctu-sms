@@ -12,7 +12,8 @@ import {
 	where,
 	setDoc,
 	addDoc,
-	getDoc
+	getDoc,
+	DocumentReference
 } from 'firebase/firestore';
 import { db } from './config';
 import { handleError } from '$lib/services/utils';
@@ -209,14 +210,18 @@ export async function deleteDocument(col: string, uid: string) {
 }
 
 export async function saveDocument<T extends AnyObject>(col: string, data: T) {
-	const colRef = collection(db, col);
+	try {
+		const colRef = collection(db, col);
 
-	if (data.uid) {
-		const uid = data.uid;
-		delete data.uid;
-		await setDoc(doc(colRef, uid), data);
-	} else {
-		await addDoc(colRef, data);
+		if (data.uid) {
+			const uid = data.uid;
+			delete data.uid;
+			await setDoc(doc(colRef, uid), data);
+		} else {
+			await addDoc(colRef, data);
+		}
+	} catch (e) {
+		return handleError(e);
 	}
 }
 

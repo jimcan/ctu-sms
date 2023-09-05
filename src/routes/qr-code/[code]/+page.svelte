@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { isValid } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { ChevronsLeft } from 'lucide-svelte';
+	import { AlertTriangle, ChevronsLeft } from 'lucide-svelte';
 
 	const code = $page.params.code;
 	const subject = $page.url.searchParams.get('subject');
@@ -16,11 +16,14 @@
 </script>
 
 <div class="flex items-center justify-center p-4 min-h-[100dvh]">
-	<div class="flex flex-col">
+	<div class="flex flex-col gap-4 min-w-[200px]">
 		{#if valid && uid && subject}
 			<Confirm {uid} {subject} />
 		{:else}
-			<p>The QR Code is invalid</p>
+			<div class="italic text-warning flex gap-2">
+				<AlertTriangle />
+				<p class="">The QR Code is invalid!</p>
+			</div>
 		{/if}
 		<a href={$page.url.origin} class="btn"><ChevronsLeft size={18} /> Back</a>
 	</div>
