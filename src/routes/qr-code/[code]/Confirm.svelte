@@ -45,6 +45,6 @@
 	<div class="flex flex-col gap-2">
 		<h4 class="text-success italic">Attendance saved!</h4>
 		<p><strong>Subject :</strong> {attendance?.for}</p>
-		<p><strong>Time :</strong> {dayjs(attendance?.time.toDate()).format('HH:mm A')}</p>
+		<p><strong>Time :</strong> {dayjs(attendance?.time.toDate()).format('hh:mm A')}</p>
 	</div>
 {/if}

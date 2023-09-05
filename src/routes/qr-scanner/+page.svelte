@@ -24,7 +24,6 @@
 			onScanFailure
 		);
 	}
-	console.log(busy);
 	async function stop() {
 		busy = true;
 
@@ -33,8 +32,9 @@
 		busy = false;
 	}
 
-	function onScanSuccess(decodedText: any) {
+	async function onScanSuccess(decodedText: any) {
 		const link = `${decodedText}&uid=${$page.data.userSession?.uid}`;
+		await stop();
 		goto(link);
 	}
 
