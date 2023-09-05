@@ -9,13 +9,14 @@
 	export let subject: string;
 
 	const attendanceStore = getAttendanceStore(uid, subject);
+	$: attendances = $attendanceStore;
 
 	let done = false;
 	let busy = false;
 	let attendance: Attendance | undefined;
 
 	async function saveAttendance() {
-		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+		if (attendances.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 			return (done = true);
 		}
 
@@ -30,10 +31,8 @@
 		busy = false;
 	}
 
-	onMount(() => {
-		setTimeout(async () => {
-			await saveAttendance();
-		}, 100);
+	onMount(async () => {
+		await saveAttendance();
 	});
 </script>
 
