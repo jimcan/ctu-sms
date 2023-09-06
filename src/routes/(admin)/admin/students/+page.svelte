@@ -19,9 +19,11 @@
 	{#if $appState.loading}
 		<div class="loading loading-dots m-8 self-center" />
 	{:else}
-		<div class={cn('flex flex-col')}>
+		<div class={cn('flex flex-col', 'gap-4')}>
 			{#each bySection as student}
-				<a href="/admin/students/{student.name}?section={selectedSection}">{student.name}</a>
+				<a class="btn" href="/admin/students/{student.name}?section={selectedSection}"
+					>{student.name}</a
+				>
 			{/each}
 		</div>
 	{/if}

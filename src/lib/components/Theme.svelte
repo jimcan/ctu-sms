@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { themes } from '$lib/themes';
 	import { cn } from '$lib/utils';
-	import { Check, Palette } from 'lucide-svelte';
+	import { Check, ChevronDown, Palette } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
-	let current_theme = '';
+	let current_theme = 'dark';
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {
@@ -27,9 +27,9 @@
 	}
 </script>
 
-<div class="dropdown dropdown-end lg:hidden">
-	<button class="btn">
-		Theme <Palette size={18} />
+<div class="dropdown dropdown-end">
+	<button class="btn btn-outline">
+		<Palette size={18} />Theme<ChevronDown size={18} />
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul

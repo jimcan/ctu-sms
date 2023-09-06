@@ -40,7 +40,7 @@
 			on:change={(e) => (subject = e.currentTarget.value)}
 		>
 			{#each subjects as sub}
-				<option value={sub.uid}>{sub.codeName}</option>
+				<option value={sub.uid}>{sub.uid}</option>
 			{/each}
 		</select>
 

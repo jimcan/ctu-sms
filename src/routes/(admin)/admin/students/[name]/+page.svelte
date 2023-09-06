@@ -54,10 +54,15 @@
 	}
 </script>
 
-<div class="flex flex-col w-full max-w-[100dvw] p-4">
+<div class="flex flex-col w-full max-w-[100dvw] p-4 items-center gap-2">
+	<div class="avatar">
+		<div class="w-64 rounded">
+			<img src={student?.photoUrl} alt="" />
+		</div>
+	</div>
 	<div
 		class={cn(
-			'flex items-center self-center',
+			'flex items-center',
 			'bg-base-100',
 			'w-full gap-2 p-2 mb-2 max-w-sm',
 			'border border-base-200 rounded-lg',
@@ -84,7 +89,7 @@
 		<div class="flex flex-col sm:flex-row gap-2">
 			<select class="select select-bordered">
 				{#each subjects ?? [] as sub}
-					<option value={sub.uid}>{sub.codeName}</option>
+					<option value={sub.uid}>{sub.uid}</option>
 				{/each}
 			</select>
 			<button class="btn" on:click={onAttendance}>Present</button>

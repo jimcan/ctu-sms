@@ -80,7 +80,7 @@
 			<div class="navbar-start">
 				<a class="btn btn-ghost normal-case hover:bg-transparent text-xl" href="/">CTU SMS</a>
 			</div>
-			<div class="navbar-end pr-2 sm:pr-6 xl:pr-0">
+			<div class="navbar-end pr-2 sm:pr-6 xl:pr-0 gap-4">
 				<div class="lg:flex items-center hidden gap-2">
 					<div class="menu menu-horizontal">
 						{#if isAdmin}

@@ -28,10 +28,10 @@
 
 <div
 	class={cn(
-		'flex flex-col gap-2 self-center',
+		'flex flex-col gap-2',
 		'bg-base-100',
 		'border border-base-200',
-		'p-2 rounded-2xl',
+		'rounded-2xl',
 		'hover:drop-shadow-[0_0_4px_#3d98ff]'
 	)}
 >

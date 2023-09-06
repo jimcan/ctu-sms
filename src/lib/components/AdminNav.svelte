@@ -13,12 +13,12 @@
 				{#if paths.length === i + 1}
 					<span class="flex gap-2 items-center capitalize">
 						<FolderOpen size={18} />
-						{path.replaceAll('%20', ' ')}
+						{decodeURI(path)}
 					</span>
 				{:else}
 					<a href={`/${p}`} class="flex gap-2 items-center capitalize">
 						<Folder size={18} />
-						{path.replaceAll('%20', ' ')}
+						{decodeURI(path)}
 					</a>
 				{/if}
 			</li>

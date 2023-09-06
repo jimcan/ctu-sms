@@ -29,7 +29,7 @@
 			</div>
 			<div class="flex gap-4">
 				<strong>Time:</strong>
-				<p>{displayDate(attendance.time.toDate(), 'HH:mm A')}</p>
+				<p>{displayDate(attendance.time.toDate(), 'hh:mm A')}</p>
 			</div>
 		</div>
 	</div>
