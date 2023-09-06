@@ -53,7 +53,7 @@
 			{#each threeSubjects as subject}
 				<div class="flex items-center gap-4">
 					<FileText />
-					<p class="text-lg font-semibold">{subject.codeName}</p>
+					<p class="text-lg font-semibold">{subject.uid}</p>
 				</div>
 			{/each}
 		</div>

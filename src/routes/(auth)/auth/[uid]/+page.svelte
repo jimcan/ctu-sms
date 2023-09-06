@@ -7,7 +7,10 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { sections as sectionsStore, subjects as subjectsStore } from '$lib/stores';
 	import { getStudentStore } from '$lib/stores/students';
-	import { onMount } from 'svelte';
+	import { fromName, toName } from '$lib/utils';
+	import { Input } from '$lib/components/ui/input';
+	import { LabeledInput } from '$lib/components/ui/labeled-input';
+	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 
 	export let data;
 
@@ -17,17 +20,21 @@
 
 	let sections = $sectionsStore;
 	let subjects = $subjectsStore;
-	let name = '';
-	let idNumber = '';
-	let sectionCode = '';
+
 	let subjectCodes: string[] = [];
 	let editing = false;
+	let fname = '';
+	let lname = '';
+	let idNumber = '';
+	let sectionCode = '';
 
 	$: student = $studentStore;
 	$: student && setInitialValues();
 
 	const setInitialValues = () => {
-		name = student?.name ?? '';
+		const { fname: fn, lname: ln } = fromName(student?.name ?? '');
+		fname = fn;
+		lname = ln ?? '';
 		idNumber = student?.idNumber?.toString() ?? '';
 		sectionCode = student?.sectionCode ?? '';
 		subjectCodes = student?.subjectCodes ?? [];
@@ -36,7 +43,7 @@
 	const handleSubmit = async () => {
 		setLoading(true);
 		await updateDocument<Student>('students', data.userSession.uid, {
-			name,
+			name: toName(fname, lname),
 			idNumber: Number(idNumber),
 			sectionCode,
 			subjectCodes
@@ -82,77 +89,27 @@
 			</div>
 		</div>
 		<div
-			class="flex flex-col bg-base-300 p-6 rounded-none rounded-b-lg md:rounded-none md:rounded-r-lg items-center h-full justify-center"
+			class="flex flex-col bg-base-300 p-4 md:p8 rounded-none rounded-b-lg md:rounded-none md:rounded-r-lg items-center h-full justify-center"
 		>
-			<form class="flex flex-col w-full items-center gap-4">
-				<div class="flex relative w-full">
-					<span class="absolute left-4 inset-y-0 z-10 flex items-center justify-center">
-						<Baseline size={18} />
-					</span>
-					<input
-						autocomplete="off"
-						type="text"
-						class="input w-full pl-12 pr-12"
-						name="name"
-						placeholder="Name"
-						bind:value={name}
-						disabled={!editing}
-					/>
-					<span class="absolute right-4 inset-y-0 z-10 flex items-center justify-center">
-						{#if editing && name}
-							<button
-								type="button"
-								class="btn btn-sm btn-ghost btn-circle"
-								on:click={() => (name = '')}
-							>
-								<X />
-							</button>
-						{/if}
-					</span>
-				</div>
-				<div class="flex relative w-full">
-					<span class="absolute left-4 inset-y-0 z-10 flex items-center justify-center">
-						<Hash size={18} />
-					</span>
-					<input
-						type="number"
-						class="input w-full pl-12 pr-12"
-						name="idNumber"
-						placeholder="ID Number"
-						bind:value={idNumber}
-						disabled={!editing}
-					/>
-					<span class="absolute right-4 inset-y-0 z-10 flex items-center justify-center">
-						{#if editing && idNumber}
-							<button
-								type="button"
-								class="btn btn-sm btn-ghost btn-circle"
-								on:click={() => (idNumber = '')}
-							>
-								<X />
-							</button>
-						{/if}
-					</span>
-				</div>
-				<div class="flex relative w-full">
-					<span class="absolute left-4 inset-y-0 z-10 flex items-center justify-center">
-						<Users2 size={18} />
-					</span>
-					<select
-						class="select w-full pl-12"
-						bind:value={sectionCode}
-						name="sectionCode"
-						placeholder="Section"
-						disabled={!editing}
-					>
-						{#each sections as section}
-							<option value={section.uid}>{section.name}</option>
-						{/each}
-					</select>
-				</div>
-				<div class={`rounded-lg p-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
-					<p class="p-2">Subjects</p>
-					<div class="">
+			<form class="flex flex-col w-full items-center">
+				<LabeledInput disabled={!editing} bind:value={idNumber} label="ID Number">
+					<Hash slot="prefix-icon" size={18} />
+				</LabeledInput>
+				<LabeledInput disabled={!editing} bind:value={fname} label="First Name">
+					<Baseline slot="prefix-icon" size={18} />
+				</LabeledInput>
+				<LabeledInput disabled={!editing} bind:value={lname} label="Last Name">
+					<Baseline slot="prefix-icon" size={18} />
+				</LabeledInput>
+				<LabeledSelect disabled={!editing} bind:value={sectionCode} label="Section">
+					<Users2 slot="prefix-icon" size={18} />
+					{#each sections as section}
+						<option value={section.uid}>{section.name}</option>
+					{/each}
+				</LabeledSelect>
+				<div class="form-control">
+					<p class="label">Subjects</p>
+					<div class={`rounded-lg p-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
 						{#each subjects as subject}
 							<div class="flex">
 								<input
@@ -163,7 +120,6 @@
 									class="checkbox checkbox-sm mt-4"
 									on:change={handleSubjectSelect}
 								/>
-
 								<div class="collapse rounded-md collapse-arrow">
 									<input type="checkbox" />
 									<div class="collapse-title">{subject.uid}</div>
@@ -175,6 +131,7 @@
 						{/each}
 					</div>
 				</div>
+				<div class="divider" />
 				<div class="flex w-full gap-4 justify-evenly">
 					<a href="/" class="btn btn-ghost sm:btn-md btn-sm" on:click={() => (editing = !editing)}>
 						<ChevronsLeft size={18} /> Home

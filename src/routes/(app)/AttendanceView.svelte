@@ -1,14 +1,15 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
 	import { cn, displayDate, getAttendanceToView } from '$lib/utils';
 	import { getAttendanceStore } from '$lib/stores/attendance.js';
 	import { subjects } from '$lib/stores/subjects';
+	import type { Dayjs } from 'dayjs';
 
 	export let uid: string;
+	export let date: Dayjs;
 
 	const attendanceStore = getAttendanceStore(uid);
 
-	$: attendanceToView = getAttendanceToView($attendanceStore, dayjs().toDate());
+	$: attendanceToView = getAttendanceToView($attendanceStore, date.toDate());
 
 	function getSubjectName(code: string) {
 		return $subjects.find((s) => s.uid === code)?.uid;

@@ -17,13 +17,13 @@
 {:else}
 	<div class="flex flex-col p-4 gap-8 md:p-8 max-w-screen-xl xl:px-0 self-center w-full">
 		<DatePicker bind:selected={date} />
-		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div class="flex flex-col gap-4">
 			<a href="/qr-scanner" class="btn">Scan Attendance</a>
 			{#if data.userSession.admin}
 				<a href="/qr-code" class="btn">QR Codes</a>
 			{/if}
 
-			<AttendanceView uid={data.userSession.uid} />
+			<AttendanceView uid={data.userSession.uid} bind:date />
 		</div>
 	</div>
 {/if}

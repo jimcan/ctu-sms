@@ -13,7 +13,7 @@
 
 	let subject = $subjects.find((s) => s.uid === $page.params.code);
 
-	let prevPath: string = '/admin/subjects';
+	let prevPath = '/admin/subjects';
 
 	onMount(() => {
 		if (subject) {

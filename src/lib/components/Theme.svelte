@@ -28,8 +28,9 @@
 </script>
 
 <div class="dropdown dropdown-end">
-	<button class="btn btn-outline">
-		<Palette size={18} />Theme<ChevronDown size={18} />
+	<button class="btn sm:btn-outline flex gap-4 flex-nowrap">
+		<Palette />
+		<span class="sm:flex gap-4 hidden">Theme<ChevronDown size={18} /></span>
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-    input {
-        @apply [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-    }
+	input {
+		@apply [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none;
+	}
 }

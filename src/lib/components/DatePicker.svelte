@@ -28,7 +28,7 @@
 
 <div
 	class={cn(
-		'flex flex-col gap-2',
+		'flex flex-col gap-2 self-center p-2',
 		'bg-base-100',
 		'border border-base-200',
 		'rounded-2xl',
