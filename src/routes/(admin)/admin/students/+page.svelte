@@ -1,11 +1,14 @@
 <script lang="ts">
+	import Avatar from '$lib/components/Avatar.svelte';
 	import { appState } from '$lib/stores/app-state';
 	import { sections } from '$lib/stores/sections';
 	import { students } from '$lib/stores/students.js';
-	import { cn } from '$lib/utils.js';
+	import { cn, toName } from '$lib/utils.js';
+	import { currentSelectedSection } from './section';
 
-	let selectedSection = $sections[0]?.uid;
-	$: bySection = $students.filter((s) => s.sectionCode === selectedSection);
+	let selectedSection = $currentSelectedSection ?? $sections[0]?.uid;
+	$: selectedSection && currentSelectedSection.set(selectedSection);
+	$: bySection = $students.filter((s) => s.sectionCode === $currentSelectedSection);
 </script>
 
 <div class={cn('flex flex-col')}>
@@ -22,7 +25,7 @@
 		</div>
 		<div class="form-control">
 			<label for="no" class="label">Number of students</label>
-			<input type="text" name="no" class="input" value={bySection.length} />
+			<input type="text" name="no" class="input w-40" value={bySection.length} />
 		</div>
 	</div>
 	{#if $appState.loading}
@@ -30,11 +33,14 @@
 	{:else}
 		<div class={cn('flex flex-col', 'gap-2', 'p-4 md:p-8')}>
 			{#each bySection as student}
+				{@const name = toName(student.firstname, student.lastname)}
 				<a
-					class={cn('flex', 'p-3 gap-3', 'bg-base-300 hover:bg-primary', 'rounded-lg')}
-					href="/admin/students/{student.name}?section={selectedSection}"
+					class={cn('flex items-center', 'p-3 gap-3', 'bg-base-300 hover:bg-primary', 'rounded-lg')}
+					href="/admin/students/{name}?section={selectedSection}"
 				>
-					{student.name}
+					<Avatar {student} />
+					<span class="text-lg">{student.idNumber}</span>
+					<span>{name}</span>
 				</a>
 			{/each}
 		</div>

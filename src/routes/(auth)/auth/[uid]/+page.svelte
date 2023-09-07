@@ -4,11 +4,9 @@
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
 	import { updateDocument, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
 	import { sections as sectionsStore, subjects as subjectsStore } from '$lib/stores';
 	import { getStudentStore } from '$lib/stores/students';
-	import { fromName, toName } from '$lib/utils';
-	import { Input } from '$lib/components/ui/input';
+	import { Avatar } from '$lib/components';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 
@@ -32,9 +30,8 @@
 	$: student && setInitialValues();
 
 	const setInitialValues = () => {
-		const { fname: fn, lname: ln } = fromName(student?.name ?? '');
-		fname = fn;
-		lname = ln ?? '';
+		fname = student?.firstname ?? '';
+		lname = student?.lastname ?? '';
 		idNumber = student?.idNumber?.toString() ?? '';
 		sectionCode = student?.sectionCode ?? '';
 		subjectCodes = student?.subjectCodes ?? [];
@@ -43,7 +40,8 @@
 	const handleSubmit = async () => {
 		setLoading(true);
 		await updateDocument<Student>('students', data.userSession.uid, {
-			name: toName(fname, lname),
+			firstname: fname,
+			lastname: lname,
 			idNumber: Number(idNumber),
 			sectionCode,
 			subjectCodes
@@ -109,7 +107,7 @@
 				</LabeledSelect>
 				<div class="form-control">
 					<p class="label">Subjects</p>
-					<div class={`rounded-lg p-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
+					<div class={`rounded-lg px-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
 						{#each subjects as subject}
 							<div class="flex">
 								<input

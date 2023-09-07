@@ -1,5 +1,6 @@
 import { decodeToken, exists, saveAsAdmin } from '$lib/services/server';
 import { themes } from '$lib/themes';
+import { fromName } from '$lib/utils';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -17,7 +18,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		};
 
 		if (!(await exists('students', uid))) {
-			await saveAsAdmin<Partial<Student>>('students', uid, { name, photoUrl: picture });
+			const { fname, lname } = fromName(name);
+			await saveAsAdmin<Partial<Student>>('students', uid, {
+				firstname: fname,
+				lastname: lname,
+				photoUrl: picture
+			});
 		}
 	}
 

@@ -27,6 +27,10 @@ export function getAttendanceToView(all: Attendance[], date: Date) {
 	return all.filter((a) => dayjs(a.time.toDate()).isSame(date, 'day'));
 }
 
+export function getScoresToView(all: Score[], date: Date) {
+	return all.filter((s) => dayjs(s.time.toDate()).isSame(date, 'day'));
+}
+
 export async function hash(text: string) {
 	const encoder = new TextEncoder();
 	const data = encoder.encode(text);
@@ -46,12 +50,12 @@ export function displayDate(date: Date, format: string = 'YYYY-MM-DD') {
 	return dayjs(date).format(format);
 }
 
-export function toTitleCase(text: string) {
-	return text.at(0)?.toUpperCase() + text.substring(1);
+export function toTitleCase(text?: string) {
+	if (text) return text.at(0)?.toUpperCase() + text.substring(1);
 }
 
-export function toName(fname: string, lname: string) {
-	return `${toTitleCase(lname)} ${toTitleCase(fname)}`;
+export function toName(fname?: string, lname?: string) {
+	return `${toTitleCase(lname)}, ${toTitleCase(fname)}`;
 }
 
 export function fromName(name: string) {

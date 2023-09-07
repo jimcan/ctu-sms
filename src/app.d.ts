@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { type } from 'os';
 
 declare global {
 	namespace App {
@@ -50,7 +51,8 @@ declare global {
 	interface Student {
 		uid: string;
 		idNumber?: number;
-		name?: string;
+		firstname?: string;
+		lastname?: string;
 		photoUrl?: string;
 		sectionCode?: string;
 		subjectCodes: string[];
@@ -63,6 +65,22 @@ declare global {
 		time: Timestamp;
 		for: string;
 		owner: string;
+	}
+
+	type ScoreTerm = 'midterm' | 'final';
+
+	type ScoreFor = 'quiz' | 'assignment' | 'project' | 'participation';
+
+	interface Score {
+		uid?: string;
+		time: Timestamp;
+		term: Term;
+		type: ScoreFor;
+		subject: string;
+		owner: string;
+		no?: number;
+		perfect: number;
+		value: number;
 	}
 }
 

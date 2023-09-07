@@ -3,6 +3,7 @@
 	import { sections } from '$lib/stores/sections';
 	import { students } from '$lib/stores/students';
 	import { subjects } from '$lib/stores/subjects';
+	import { toName } from '$lib/utils';
 	import { FileText, Users2 } from 'lucide-svelte';
 
 	$: threeStudents = $students?.slice(0, 3);
@@ -22,7 +23,9 @@
 				{#each threeStudents as student}
 					<div class="flex items-center gap-4">
 						<Avatar {student} outline="accent" />
-						<p class="text-lg font-semibold">{student.name}</p>
+						<p class="text-lg font-semibold">
+							{toName(student.firstname ?? '', student.lastname ?? '')}
+						</p>
 					</div>
 				{/each}
 			</div>
