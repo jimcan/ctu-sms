@@ -1,14 +1,18 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { appState } from '$lib/stores/app-state';
+	import { currentSchedule } from '$lib/stores/schedules';
 	import { sections } from '$lib/stores/sections';
 	import { students } from '$lib/stores/students.js';
 	import { cn, toName } from '$lib/utils.js';
 	import { currentSelectedSection } from './section';
 
-	let selectedSection = $currentSelectedSection ?? $sections[0]?.uid;
+	let selectedSection = $currentSchedule?.section ?? $currentSelectedSection ?? $sections[0]?.uid;
 	$: selectedSection && currentSelectedSection.set(selectedSection);
-	$: bySection = $students.filter((s) => s.sectionCode === $currentSelectedSection);
+	$: bySection =
+		selectedSection === 'All'
+			? $students
+			: $students.filter((s) => s.sectionCode === $currentSelectedSection);
 </script>
 
 <div class={cn('flex flex-col')}>
@@ -16,6 +20,7 @@
 		<div class="form-control">
 			<label for="section" class="label">Section</label>
 			<select class="select" name="section" bind:value={selectedSection}>
+				<option value="All">All</option>
 				{#each $sections as section}
 					<option value={section.uid}>
 						{section.name}

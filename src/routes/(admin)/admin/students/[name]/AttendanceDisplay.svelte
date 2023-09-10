@@ -4,11 +4,11 @@
 	import type { Dayjs } from 'dayjs';
 	import dayjs from 'dayjs';
 
-	export let studentId: string;
+	export let studentUid: string;
 
 	let date: Dayjs;
 
-	$: attendanceStore = getAttendanceStore(studentId);
+	$: attendanceStore = getAttendanceStore(studentUid);
 	$: attendanceToView = getAttendanceToView($attendanceStore, date?.toDate());
 </script>
 

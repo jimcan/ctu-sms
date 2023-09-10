@@ -6,13 +6,14 @@
 	import { subjects as subjectsStore } from '$lib/stores/subjects';
 	import dayjs from 'dayjs';
 	import { hash } from '$lib/utils';
+	import { currentSchedule } from '$lib/stores/schedules';
 
 	let qrcode: HTMLImageElement;
 	let date = dayjs();
 	let text: string | undefined = '';
 
 	$: subjects = $subjectsStore;
-	$: subject = subjects.at(0)?.uid;
+	$: subject = $currentSchedule?.subject ?? subjects.at(0)?.uid;
 	$: subject && date && generate();
 
 	const generateQR = async (text: string) => {

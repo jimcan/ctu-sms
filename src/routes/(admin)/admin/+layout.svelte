@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { signOut } from '$lib/services/client';
 	import { setLoading, setState } from '$lib/stores/app-state';
-	import { FileText, GanttChart, Home, LayoutDashboard, LogOut, Menu, Users2 } from 'lucide-svelte';
+	import {
+		CalendarCheck,
+		CalendarCheck2,
+		FileText,
+		GanttChart,
+		Home,
+		LayoutDashboard,
+		LogOut,
+		Menu,
+		Users2
+	} from 'lucide-svelte';
 	import { NavListTile, Avatar, AdminNav } from '$lib/components';
 	import { onMount } from 'svelte';
 	import { getDocument } from '$lib/services/client/firebase/db.js';
@@ -64,6 +74,9 @@
 				</NavListTile>
 				<NavListTile bind:checked title="Subjects" to="/admin/subjects">
 					<FileText size={22} slot="icon" />
+				</NavListTile>
+				<NavListTile bind:checked title="Schedules" to="/admin/schedules">
+					<CalendarCheck2 size={22} slot="icon" />
 				</NavListTile>
 				<div class="flex-1" />
 				<div class="divider" />

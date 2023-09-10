@@ -4,7 +4,7 @@
 	import { Timestamp } from 'firebase/firestore';
 	import { currentSelectedSubject } from '../subject';
 
-	export let studentId: string;
+	export let studentUid: string;
 
 	const terms: ScoreTerm[] = ['midterm', 'final'];
 	const types: ScoreFor[] = ['quiz', 'assignment', 'project', 'participation'];
@@ -16,9 +16,11 @@
 	let no: string | undefined;
 
 	async function onSave() {
+		console.log($currentSelectedSubject);
+
 		if ($currentSelectedSubject) {
 			const score: Score = {
-				owner: studentId,
+				owner: studentUid,
 				perfect: Number(perfect),
 				subject: $currentSelectedSubject,
 				term,
@@ -27,7 +29,9 @@
 				no: Number(no),
 				time: Timestamp.fromDate(new Date())
 			};
-			await saveDocument<Score>('scores', score);
+			const err = await saveDocument<Score>('scores', score);
+
+			console.log(err);
 		}
 	}
 </script>

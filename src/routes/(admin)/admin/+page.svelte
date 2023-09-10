@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { currentSchedule } from '$lib/stores/schedules';
 	import { sections } from '$lib/stores/sections';
 	import { students } from '$lib/stores/students';
 	import { subjects } from '$lib/stores/subjects';
-	import { toName } from '$lib/utils';
-	import { FileText, Users2 } from 'lucide-svelte';
+	import { timeToDisplay, toName } from '$lib/utils';
+	import { FileText, TimerOff, Users2 } from 'lucide-svelte';
 
 	$: threeStudents = $students?.slice(0, 3);
 	$: threeSections = $sections?.slice(0, 3);
@@ -12,6 +13,43 @@
 </script>
 
 <div class="grid md:grid-cols-2 p-4 md:p-8 gap-4 md:gap-8">
+	<a
+		href="admin/schedules"
+		class="flex flex-col bg-base-300 rounded-lg shadow-lg p-4 hover:drop-shadow-[0_0_4px_#3d98ff]"
+	>
+		<h4 class="text-xl font-semibold">Current Schedule</h4>
+		<div class="divider" />
+		{#if $currentSchedule}
+			{@const sched = $currentSchedule}
+			<div class="flex flex-col">
+				<span class="flex">
+					<strong class="w-24">Section :</strong>
+					<p>{sched.section}</p>
+				</span>
+				<span class="flex">
+					<strong class="w-24">Subject :</strong>
+					<p>{sched.subject}</p>
+				</span>
+				<span class="flex">
+					<strong class="w-24">Days :</strong>
+					<p>{sched.days}</p>
+				</span>
+				<span class="flex">
+					<strong class="w-24">Start :</strong>
+					<p>{timeToDisplay(sched.start)}</p>
+				</span>
+				<span class="flex">
+					<strong class="w-24">End :</strong>
+					<p>{timeToDisplay(sched.end)}</p>
+				</span>
+			</div>
+		{:else}
+			<span class="flex gap-2 items-center text-lg">
+				<TimerOff size={18} />
+				Vacant
+			</span>
+		{/if}
+	</a>
 	<a
 		href="/admin/students"
 		class="flex flex-col bg-base-300 rounded-lg shadow-lg p-4 hover:drop-shadow-[0_0_4px_#3d98ff]"

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ConfirmDialog from '../../../../lib/components/ConfirmDialog.svelte';
 
-	import { PenSquare, Trash2 } from 'lucide-svelte';
+	import { PenSquare } from 'lucide-svelte';
 	import { sections } from '$lib/stores/sections';
 	import { cn } from '$lib/utils';
 	import { deleteDocument } from '$lib/services/client/firebase/db';
@@ -23,7 +23,6 @@
 				<thead class="text-lg">
 					<tr>
 						<th />
-						<th>Code</th>
 						<th>Section Name</th>
 						<th>Action</th>
 					</tr>
@@ -32,8 +31,7 @@
 					{#each $sections as section, i}
 						<tr class="hover">
 							<th>{i + 1}</th>
-							<td>{section.uid}</td>
-							<td>{section.name}</td>
+							<td class="truncate">{section.name}</td>
 							<td class="join">
 								<a href="/admin/sections/{section.name}" class="btn btn-sm join-item">
 									<PenSquare size={18} />

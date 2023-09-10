@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -50,8 +50,17 @@ export function displayDate(date: Date, format: string = 'YYYY-MM-DD') {
 	return dayjs(date).format(format);
 }
 
+export function displayTime(date: Date, format: string = 'hh:mm A') {
+	return dayjs(date).format(format);
+}
+
 export function toTitleCase(text?: string) {
-	if (text) return text.at(0)?.toUpperCase() + text.substring(1);
+	if (!text) return;
+	return text
+		.trim()
+		.split(' ')
+		.map((t) => t.at(0)?.toUpperCase() + t.slice(1).toLowerCase())
+		.join(' ');
 }
 
 export function toName(fname?: string, lname?: string) {
@@ -66,4 +75,54 @@ export function fromName(name: string) {
 		fname: s.join(' '),
 		lname
 	};
+}
+
+export function timeFromSchedule(time: ScheduleTime) {
+	let date = dayjs();
+	date = date.set('s', 0);
+	date = date.set('m', time.m);
+	date = date.set('h', time.h);
+
+	return date;
+}
+
+export function dateToScheduleTime(date: Dayjs): ScheduleTime {
+	const h = date.hour();
+	const m = date.minute();
+
+	return { h, m };
+}
+
+export function dateStringToScheduleTime(date: string): ScheduleTime {
+	const [t, a] = date.split(' ');
+	const [sh, sm] = t.split(':');
+
+	let h = Number(sh);
+	const m = Number(sm);
+
+	if (a === 'pm') {
+		h += 12;
+	}
+
+	return { h, m };
+}
+
+export function timeToDisplay(time: ScheduleTime) {
+	const date = timeFromSchedule(time);
+
+	return date.format('hh:mm A');
+}
+
+export const scheduleDays: ScheduleDay[] = ['S', 'M', 'T', 'W', 'Th', 'F', 'Sa'];
+export const mwf: ScheduleDay[] = [scheduleDays[1], scheduleDays[3], scheduleDays[5]];
+export const tth: ScheduleDay[] = [scheduleDays[2], scheduleDays[4]];
+export const ssa: ScheduleDay[] = [scheduleDays[0], scheduleDays[6]];
+
+export function scheduleInTime(time: Schedule) {
+	const start = timeFromSchedule(time.start);
+	const end = timeFromSchedule(time.end);
+	const now = dayjs();
+	const inDays = time.days.includes(scheduleDays[now.day()] as ScheduleDay);
+
+	return inDays ? now.isAfter(start) && now.isBefore(end) : false;
 }

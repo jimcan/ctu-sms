@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { db } from '$lib/services/client';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { readable } from 'svelte/store';
 
 export const students = readable<Student[]>([], (set) => {
@@ -10,7 +10,7 @@ export const students = readable<Student[]>([], (set) => {
 	if (browser) {
 		if (unsubbed) return;
 
-		dbUnsub = onSnapshot(collection(db, 'students'), (snapshot) => {
+		dbUnsub = onSnapshot(query(collection(db, 'students'), orderBy('lastname')), (snapshot) => {
 			if (snapshot.empty) {
 				dbUnsub();
 			}

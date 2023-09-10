@@ -48,6 +48,23 @@ declare global {
 		name: string;
 	}
 
+	type ScheduleDay = 'S' | 'M' | 'T' | 'W' | 'Th' | 'F' | 'Sa';
+
+	interface ScheduleTime {
+		h: number;
+		m: number;
+	}
+
+	interface Schedule {
+		uid?: string;
+		section: string;
+		subject: string;
+		days: ScheduleDay[];
+		start: ScheduleTime;
+		end: ScheduleTime;
+		room: string;
+	}
+
 	interface Student {
 		uid: string;
 		idNumber?: number;
