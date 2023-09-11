@@ -2,6 +2,8 @@
 	import AttendanceView from './AttendanceView.svelte';
 	import dayjs from 'dayjs';
 	import { DatePicker } from '$lib/components';
+	import { QrCode, QrCodeIcon, ScanLine } from 'lucide-svelte';
+	import QrScanner from '$lib/components/QRScanner.svelte';
 
 	export let data;
 
@@ -18,9 +20,10 @@
 	<div class="flex flex-col p-4 gap-8 md:p-8 max-w-screen-xl xl:px-0 self-center w-full">
 		<DatePicker bind:selected={date} />
 		<div class="flex flex-col gap-4">
-			<a href="/qr-scanner" class="btn">Scan Attendance</a>
 			{#if data.userSession.admin}
-				<a href="/qr-code" class="btn">QR Codes</a>
+				<a href="/qr-code" class="btn"><QrCode size={18} /> QR Codes</a>
+			{:else}
+				<a href="/qr-scanner" class="btn"><ScanLine size={18} />Scan Attendance</a>
 			{/if}
 
 			<AttendanceView uid={data.userSession.uid} bind:date />
