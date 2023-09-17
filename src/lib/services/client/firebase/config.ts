@@ -1,7 +1,7 @@
 import { initializeApp, type FirebaseApp, type FirebaseOptions } from 'firebase/app';
-import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getAuth, type Auth, onIdTokenChanged } from 'firebase/auth';
-import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { getFirestore, type Firestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getAuth, type Auth, onIdTokenChanged, connectAuthEmulator } from 'firebase/auth';
+import { getStorage, type FirebaseStorage, connectStorageEmulator } from 'firebase/storage';
 import { browser } from '$app/environment';
 import { invalidateAll } from '$app/navigation';
 
@@ -20,6 +20,10 @@ export function initFirebase(options: FirebaseOptions) {
 		auth = getAuth(app);
 		storage = getStorage(app);
 		listenForAuthChanges();
+
+		// connectFirestoreEmulator(db, 'localhost', 8080);
+		// connectAuthEmulator(auth, 'http://localhost:9099');
+		// connectStorageEmulator(storage, 'localhost', 9199);
 	}
 }
 

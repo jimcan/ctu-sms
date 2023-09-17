@@ -1,51 +1,35 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { students as studentsStore } from '$lib/stores/students';
+	import { currentStudent, currentStudentUid, studentsBySection } from '$lib/stores/students';
 	import { cn, toName } from '$lib/utils';
 	import { SkipBack, SkipForward } from 'lucide-svelte';
 
-	let section = $page.url.searchParams.get('section');
-	let students =
-		section === 'All' ? $studentsStore : $studentsStore.filter((s) => s.sectionCode === section);
-	export let student = students.find(
-		(s) => toName(s.firstname ?? '', s.lastname ?? '') === $page.params.name
-	);
-
-	$: currentStudentIndex = student ? students.indexOf(student) : 0;
-	$: prevStudent = currentStudentIndex > 0 ? students.at(currentStudentIndex - 1) : undefined;
-	$: nextStudent = students.at(currentStudentIndex + 1);
+	$: cs = $currentStudent;
+	$: ci = cs?.index;
+	$: ps = ci && ci > 0 ? $studentsBySection.at(ci - 1) : undefined;
+	$: ns =
+		typeof ci !== 'undefined' && ci < $studentsBySection.length - 1
+			? $studentsBySection.at(ci + 1)
+			: undefined;
 
 	function onPrev() {
-		if (prevStudent) {
-			currentStudentIndex -= 1;
-			student = prevStudent;
-			goto(
-				`/admin/students/${toName(
-					prevStudent?.firstname ?? '',
-					prevStudent?.lastname ?? ''
-				)}?section=${section}`
-			);
+		if (ps) {
+			currentStudentUid.set(ps.uid);
+			goto(`/admin/students/${toName(ps?.firstname ?? '', ps?.lastname ?? '')}`);
 		}
 	}
 
 	function onNext() {
-		if (nextStudent) {
-			currentStudentIndex += 1;
-			student = nextStudent;
-			goto(
-				`/admin/students/${toName(
-					nextStudent.firstname ?? '',
-					nextStudent.lastname ?? ''
-				)}?section=${section}`
-			);
+		if (ns) {
+			currentStudentUid.set(ns.uid);
+			goto(`/admin/students/${toName(ns?.firstname ?? '', ns?.lastname ?? '')}`);
 		}
 	}
 </script>
 
 <div class="avatar mt-4">
 	<div class="w-64 rounded">
-		<img src={student?.photoUrl} alt="" />
+		<img src={cs?.value?.photoUrl} alt="" />
 	</div>
 </div>
 <div
@@ -57,11 +41,11 @@
 		'hover:drop-shadow-[0_0_4px_#3d98ff]'
 	)}
 >
-	<button disabled={!prevStudent} class="btn" on:click={onPrev}><SkipBack /></button>
+	<button disabled={!ps} class="btn" on:click={onPrev}><SkipBack /></button>
 	<div class="flex items-center justify-center bg-base-200 rounded-lg w-full h-full">
 		<h1 class="text-xl font-semibold">
-			{toName(student?.firstname ?? '', student?.lastname ?? '')}
+			{toName(cs?.value?.firstname ?? '', cs?.value?.lastname ?? '')}
 		</h1>
 	</div>
-	<button disabled={!nextStudent} class="btn" on:click={onNext}><SkipForward /></button>
+	<button disabled={!ns} class="btn" on:click={onNext}><SkipForward /></button>
 </div>

@@ -93,7 +93,7 @@ declare global {
 		time: Timestamp;
 		term: Term;
 		type: ScoreFor;
-		subject: string;
+		for: string;
 		owner: string;
 		no?: number;
 		perfect: number;

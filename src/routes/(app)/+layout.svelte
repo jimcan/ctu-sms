@@ -1,27 +1,29 @@
 <script lang="ts">
 	import { Theme } from '$lib/components';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { signOut } from '$lib/services/client';
 	import { appState, clearState } from '$lib/stores/app-state.js';
-	import { getStudentStore } from '$lib/stores/students.js';
+	import { currentUid, currentStudent } from '$lib/stores/my-details.js';
 	import { cn } from '$lib/utils.js';
 	import {
 		AlertTriangle,
 		CheckCircle2,
 		Info,
 		LogIn,
-		LogOut,
 		UserCog2,
 		Users2,
 		X,
 		XCircle
 	} from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
 
-	const isAdmin = data.userSession?.admin;
-	$: studentStore = data.userSession && getStudentStore(data.userSession?.uid);
-	$: student = $studentStore;
+	onMount(() => {
+		currentUid.set(data.userSession?.uid);
+	});
+
+	$: student = $currentStudent;
+	$: isAdmin = data.userSession?.admin;
 </script>
 
 <div class="flex flex-col min-h-[100dvh]">
@@ -75,71 +77,22 @@
 			<progress class="progress rounded-none progress-accent h-5" />
 		{/if}
 	</div>
-	<div class="flex justify-center w-full bg-base-200">
+	<div class="flex justify-center w-full bg-base-200 border-b border-base-content">
 		<div class="navbar max-w-screen-xl">
 			<div class="navbar-start">
 				<a class="btn btn-ghost normal-case hover:bg-transparent text-xl" href="/">CTU SMS</a>
 			</div>
 			<div class="navbar-end pr-2 sm:pr-6 xl:pr-0 gap-4">
-				<div class="lg:flex items-center hidden gap-2">
-					<div class="menu menu-horizontal">
-						{#if isAdmin}
-							<a class="btn" href="/admin"><UserCog2 size={18} /> Admin</a>
-						{/if}
-						<a class="btn" href="/auth">
-							{#if student}
-								<LogIn size={18} /> Account
-							{:else}
-								<Users2 size={18} /> Sign in
-							{/if}
-						</a>
-						{#if student}
-							<a href="/" on:click={signOut} class="btn"><LogOut size={18} /> Sign out</a>
-						{/if}
-					</div>
-					<Avatar student={student ?? undefined} size="sm" outline="accent" />
-				</div>
 				<Theme />
-				<div class="dropdown dropdown-end lg:hidden">
-					<button class="btn btn-ghost btn-circle">
-						<Avatar student={student ?? undefined} outline="accent" />
-					</button>
-					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-					<ul
-						tabindex="0"
-						class={cn(
-							'dropdown-content',
-							'bg-base-200 shadow-lg',
-							'py-2 mt-4 min-w-[150px]',
-							'rounded-md z-10'
-						)}
-					>
-						<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
-							<a href="/auth" class="w-full flex items-center gap-2">
-								{#if student}
-									<LogIn size={18} /> Account
-								{:else}
-									<Users2 size={18} /> Sign in
-								{/if}
-							</a>
-						</li>
-						{#if student}
-							<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
-								<a href="/" on:click={signOut} class="w-full flex items-center gap-2">
-									<LogOut size={18} /> Sign out
-								</a>
-							</li>
-						{/if}
 
-						{#if isAdmin}
-							<li class="btn btn-ghost btn-sm truncate rounded-none w-full text-left">
-								<a href="/admin" class="w-full flex items-center gap-2">
-									<UserCog2 size={18} /> Admin
-								</a>
-							</li>
-						{/if}
-					</ul>
-				</div>
+				{#if isAdmin}
+					<a href="/admin" class="btn btn-outline btn-circle btn-ghost">
+						<UserCog2 />
+					</a>
+				{/if}
+				<a href="/auth" class="btn btn-ghost btn-circle">
+					<Avatar {student} outline="accent" />
+				</a>
 			</div>
 		</div>
 	</div>

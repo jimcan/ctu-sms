@@ -3,7 +3,7 @@
 	import { cn, modulo } from '$lib/utils';
 
 	export let value: number;
-	export let fontSize: string = 'text-2xl';
+	export let fontSize: string = 'text-lg';
 
 	const count = spring();
 	$: count.set(value);

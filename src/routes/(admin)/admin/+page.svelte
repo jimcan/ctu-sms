@@ -1,13 +1,11 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { currentSchedule } from '$lib/stores/schedules';
-	import { sections } from '$lib/stores/sections';
-	import { students } from '$lib/stores/students';
-	import { subjects } from '$lib/stores/subjects';
+	import { sections, studentsBySection, subjects } from '$lib/stores';
 	import { timeToDisplay, toName } from '$lib/utils';
 	import { FileText, TimerOff, Users2 } from 'lucide-svelte';
 
-	$: threeStudents = $students?.slice(0, 3);
+	$: threeStudents = $studentsBySection?.slice(0, 3);
 	$: threeSections = $sections?.slice(0, 3);
 	$: threeSubjects = $subjects?.slice(0, 3);
 </script>

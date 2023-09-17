@@ -1,48 +1,23 @@
 <script lang="ts">
-	import { cn, displayDate, getAttendanceToView } from '$lib/utils';
-	import { getAttendanceStore } from '$lib/stores/attendance.js';
-	import { subjects } from '$lib/stores/subjects';
-	import type { Dayjs } from 'dayjs';
+	import { displayDate, getAttendanceToView } from '$lib/utils';
+	import { date } from '$lib/stores/date';
+	import { currentAttendance } from '$lib/stores/my-details';
+	import { EventListTile } from '$lib/components';
 
-	export let uid: string;
-	export let date: Dayjs;
-
-	const attendanceStore = getAttendanceStore(uid);
-
-	$: attendanceToView = getAttendanceToView($attendanceStore, date.toDate());
-
-	function getSubjectName(code: string) {
-		return $subjects.find((s) => s.uid === code)?.uid;
-	}
+	$: attendanceToView = getAttendanceToView($currentAttendance, $date.toDate());
 </script>
 
-{#each attendanceToView as attendance}
-	<div class={cn('flex', 'bg-base-200', 'rounded-lg', 'hover:drop-shadow-[0_0_4px_#3d98ff]')}>
-		<div
-			class={cn('flex items-center justify-center', 'bg-accent/50', 'w-10 md:w-12', 'rounded-l-lg')}
-		>
-			<p class="label">Attendance</p>
-		</div>
-		<div class={cn('flex flex-col justify-evenly gap-2', 'p-4')}>
+<div class="flex flex-col gap-4 max-w-sm self-center w-full">
+	{#each attendanceToView as attendance}
+		<EventListTile type="attendance">
 			<div class="flex gap-4">
-				<strong>Subject:</strong>
-				<p>{getSubjectName(attendance.for)}</p>
+				<strong>Subject :</strong>
+				<p>{attendance.for}</p>
 			</div>
 			<div class="flex gap-4">
-				<strong>Time:</strong>
+				<strong>Time :</strong>
 				<p>{displayDate(attendance.time.toDate(), 'hh:mm A')}</p>
 			</div>
-		</div>
-	</div>
-{/each}
-
-<style>
-	.label {
-		writing-mode: vertical-rl;
-		white-space: nowrap;
-		letter-spacing: -1px;
-		font-weight: 500;
-		text-transform: uppercase;
-		font-size: small;
-	}
-</style>
+		</EventListTile>
+	{/each}
+</div>

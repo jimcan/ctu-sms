@@ -15,24 +15,26 @@
 	import { NavListTile, Avatar, AdminNav } from '$lib/components';
 	import { onMount } from 'svelte';
 	import { getDocument } from '$lib/services/client/firebase/db.js';
+	import { currentSchedule } from '$lib/stores/schedules.js';
+	import { sections, selectedSection } from '$lib/stores/sections.js';
+	import { selectedSubject, subjects } from '$lib/stores/subjects.js';
+	import { currentStudent } from '$lib/stores/my-details.js';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
-	let student: Student | null | undefined;
+	let student = $currentStudent;
 	let checked = false;
 
 	onMount(async () => {
-		if (data.userSession) {
-			student = await getDocument<Student>('students', data.userSession.uid);
-		}
+		if (!student) goto('/');
+
+		selectedSection.set($currentSchedule?.section ?? 'All');
+		selectedSubject.set($currentSchedule?.subject ?? $subjects[0].uid);
 	});
 
 	async function onSignOut() {
-		setLoading(true);
-		const error = await signOut();
-		setLoading(false);
-
-		if (error) setState(error);
+		await signOut();
 	}
 </script>
 

@@ -16,6 +16,8 @@ export const schedules = readable<Schedule[]>([], (set) => {
 				dbUnsub();
 			}
 
+			console.log('loading schedule');
+
 			return set(
 				snapshot.docs.map((d) => {
 					return { uid: d.id, ...d.data() } as Schedule;

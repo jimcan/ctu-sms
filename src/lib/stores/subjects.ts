@@ -1,7 +1,9 @@
 import { browser } from '$app/environment';
 import { db } from '$lib/services/client';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { readable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
+
+export const selectedSubject = writable<string | undefined>();
 
 export const subjects = readable<Subject[]>([], (set) => {
 	let dbUnsub: () => void;

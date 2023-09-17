@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { saveDocument } from '$lib/services/client/firebase/db';
-	import { getAttendanceStore } from '$lib/stores/attendance';
+	import { studentsAttendance } from '$lib/stores/attendance';
 	import dayjs from 'dayjs';
 	import { Timestamp } from 'firebase/firestore';
 	import { onMount } from 'svelte';
@@ -8,17 +8,14 @@
 	export let uid: string;
 	export let subject: string;
 
-	const attendanceStore = getAttendanceStore(uid, subject);
-	$: attendances = $attendanceStore;
+	// $: attendances = $studentsAttendance;
 
 	let done = false;
 	let busy = false;
 	let attendance: Attendance | undefined;
 
-	$: console.log(attendances);
-
 	async function saveAttendance() {
-		if (attendances.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+		if ($studentsAttendance.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 			return (done = true);
 		}
 

@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { getAttendanceStore } from '$lib/stores/attendance';
+	import { attendance } from '$lib/stores/attendance';
 	import { cn, getAttendanceToView } from '$lib/utils';
 	import type { Dayjs } from 'dayjs';
 	import dayjs from 'dayjs';
 
-	export let studentUid: string;
-
 	let date: Dayjs;
 
-	$: attendanceStore = getAttendanceStore(studentUid);
-	$: attendanceToView = getAttendanceToView($attendanceStore, date?.toDate());
+	// $: attendanceStore = getAttendanceStore(studentUid);
+	$: attendanceToView = getAttendanceToView($attendance, date?.toDate());
 </script>
 
 {#each attendanceToView as attendance}

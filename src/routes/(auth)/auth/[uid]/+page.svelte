@@ -4,8 +4,11 @@
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
 	import { updateDocument, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
-	import { sections as sectionsStore, subjects as subjectsStore } from '$lib/stores';
-	import { getStudentStore } from '$lib/stores/students';
+	import {
+		currentStudent,
+		sections as sectionsStore,
+		subjects as subjectsStore
+	} from '$lib/stores';
 	import { Avatar } from '$lib/components';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
@@ -13,8 +16,6 @@
 	export let data;
 
 	setLoading(false);
-
-	const studentStore = getStudentStore(data.userSession.uid);
 
 	let sections = $sectionsStore;
 	let subjects = $subjectsStore;
@@ -26,7 +27,7 @@
 	let idNumber = '';
 	let sectionCode = '';
 
-	$: student = $studentStore;
+	$: student = $currentStudent?.value;
 	$: student && setInitialValues();
 
 	const setInitialValues = () => {

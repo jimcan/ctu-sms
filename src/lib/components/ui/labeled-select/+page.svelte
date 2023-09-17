@@ -2,7 +2,6 @@
 	import type { HTMLSelectAttributes } from 'svelte/elements';
 	import { cn } from '$lib/utils';
 	import type { SelectEvents } from '.';
-	import { X } from 'lucide-svelte';
 
 	type $$Props = HTMLSelectAttributes & { label: string };
 	type $$Events = SelectEvents;

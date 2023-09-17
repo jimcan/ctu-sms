@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { getScoresStore } from '$lib/stores/scores';
-	import { cn, getAttendanceToView, getScoresToView } from '$lib/utils';
+	import { scores } from '$lib/stores/scores';
+	import { cn, getScoresToView } from '$lib/utils';
 	import type { Dayjs } from 'dayjs';
 	import dayjs from 'dayjs';
 
-	export let studentId: string;
-
 	let date: Dayjs;
 
-	$: scoresStore = getScoresStore(studentId);
-	$: scoresToView = getScoresToView($scoresStore, date?.toDate());
+	$: scoresToView = getScoresToView($scores, date?.toDate());
 </script>
 
 {#each scoresToView as score}

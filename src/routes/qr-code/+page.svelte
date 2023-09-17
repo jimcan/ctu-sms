@@ -34,7 +34,7 @@
 
 <div class="flex min-h-[100dvh] items-center justify-center p-4 sm:p-8">
 	<div class="flex flex-col w-full items-center max-w-lg gap-4">
-		<DatePicker bind:selected={date} />
+		<DatePicker />
 		<select
 			value={subject}
 			class="select select-bordered w-full max-w-xs"
