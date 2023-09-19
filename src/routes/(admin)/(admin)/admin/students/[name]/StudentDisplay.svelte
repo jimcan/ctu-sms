@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { currentStudent, currentStudentUid, studentsBySection } from '$lib/stores/students';
+	import { selectedStudent, selectedUid, studentsBySection } from '$lib/stores/admin';
 	import { cn, toName } from '$lib/utils';
 	import { SkipBack, SkipForward } from 'lucide-svelte';
 
-	$: cs = $currentStudent;
+	$: cs = $selectedStudent;
 	$: ci = cs?.index;
 	$: ps = ci && ci > 0 ? $studentsBySection.at(ci - 1) : undefined;
 	$: ns =
@@ -14,14 +14,14 @@
 
 	function onPrev() {
 		if (ps) {
-			currentStudentUid.set(ps.uid);
+			selectedUid.set(ps.uid);
 			goto(`/admin/students/${toName(ps?.firstname ?? '', ps?.lastname ?? '')}`);
 		}
 	}
 
 	function onNext() {
 		if (ns) {
-			currentStudentUid.set(ns.uid);
+			selectedUid.set(ns.uid);
 			goto(`/admin/students/${toName(ns?.firstname ?? '', ns?.lastname ?? '')}`);
 		}
 	}

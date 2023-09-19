@@ -3,17 +3,16 @@
 	import QRCode from 'qrcode';
 
 	import DatePicker from '$lib/components/DatePicker.svelte';
-	import { subjects as subjectsStore } from '$lib/stores/subjects';
 	import dayjs from 'dayjs';
 	import { hash } from '$lib/utils';
-	import { currentSchedule } from '$lib/stores/schedules';
+	import { currentSchedule, subjects } from '$lib/stores';
 
 	let qrcode: HTMLImageElement;
 	let date = dayjs();
 	let text: string | undefined = '';
 
-	$: subjects = $subjectsStore;
-	$: subject = $currentSchedule?.subject ?? subjects.at(0)?.uid;
+	// $: subjects = $subjectsStore;
+	$: subject = $currentSchedule?.subject ?? $subjects.at(0)?.uid;
 	$: subject && date && generate();
 
 	const generateQR = async (text: string) => {
@@ -40,7 +39,7 @@
 			class="select select-bordered w-full max-w-xs"
 			on:change={(e) => (subject = e.currentTarget.value)}
 		>
-			{#each subjects as sub}
+			{#each $subjects as sub}
 				<option value={sub.uid}>{sub.uid}</option>
 			{/each}
 		</select>

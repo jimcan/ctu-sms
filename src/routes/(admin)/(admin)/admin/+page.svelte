@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { currentSchedule } from '$lib/stores/schedules';
-	import { sections, studentsBySection, subjects } from '$lib/stores';
+	import { currentSchedule, sections, subjects } from '$lib/stores';
+	import { studentsBySection } from '$lib/stores/admin';
 	import { timeToDisplay, toName } from '$lib/utils';
 	import { FileText, TimerOff, Users2 } from 'lucide-svelte';
 

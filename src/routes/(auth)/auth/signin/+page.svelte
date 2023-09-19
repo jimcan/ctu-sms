@@ -1,13 +1,8 @@
 <script lang="ts">
 	import { signinWithGoogle } from '$lib/services/client';
-	import { appState, setLoading, setState } from '$lib/stores/app-state';
 
 	const onSignin = async () => {
-		setLoading(true);
-		const error = await signinWithGoogle();
-		console.log(error);
-
-		if (error) setState(error);
+		await signinWithGoogle();
 	};
 </script>
 
@@ -37,7 +32,6 @@
 		>
 			<p class="text-center">You need to signin with your google account to continue</p>
 			<button
-				disabled={$appState.loading}
 				class="btn w-full max-w-md bg-slate-50 hover:bg-slate-400 text-slate-900 mt-6 mb-2"
 				on:click={onSignin}
 			>
@@ -60,11 +54,7 @@
 					/>
 					<path d="M1 1h22v22H1z" fill="none" />
 				</svg>
-				{#if $appState.loading}
-					Signing in with Google <div class="loading loading-dots" />
-				{:else}
-					Sign in with Google
-				{/if}
+				Sign in with Google
 			</button>
 			<p class="leading-tight text-center">
 				By signin in you agree on our

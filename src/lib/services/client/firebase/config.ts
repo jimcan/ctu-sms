@@ -20,10 +20,6 @@ export function initFirebase(options: FirebaseOptions) {
 		auth = getAuth(app);
 		storage = getStorage(app);
 		listenForAuthChanges();
-
-		// connectFirestoreEmulator(db, 'localhost', 8080);
-		// connectAuthEmulator(auth, 'http://localhost:9099');
-		// connectStorageEmulator(storage, 'localhost', 9199);
 	}
 }
 

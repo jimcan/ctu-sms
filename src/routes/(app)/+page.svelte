@@ -3,14 +3,13 @@
 	import { DatePicker } from '$lib/components';
 	import { QrCode, ScanLine } from 'lucide-svelte';
 	import ScoreView from './ScoreView.svelte';
-
-	export let data;
+	import { currentStudent, isAdmin } from '$lib/stores';
 </script>
 
-{#if data.userSession?.uid}
+{#if $currentStudent}
 	<div class="flex flex-col px-4 gap-4 pt-8 max-w-screen-xl xl:px-0 w-full self-center">
 		<DatePicker />
-		{#if data.userSession?.admin}
+		{#if $isAdmin}
 			<a href="/qr-code" class="btn max-w-sm self-center w-full"><QrCode size={18} /> QR Codes</a>
 		{:else}
 			<a href="/qr-scanner" class="btn max-w-sm self-center w-full">

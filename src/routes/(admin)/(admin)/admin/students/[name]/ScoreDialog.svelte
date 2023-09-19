@@ -1,16 +1,14 @@
 <script lang="ts">
-	import DatePicker from '$lib/components/DatePicker.svelte';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 	import { saveDocument } from '$lib/services/client';
-	import { currentStudentUid, subjects } from '$lib/stores';
-	import { selectedSubject } from '$lib/stores/subjects';
+	import { subjects, selectedDate } from '$lib/stores';
+	import { selectedSubject, selectedUid } from '$lib/stores/admin';
 	import { cn, toTitleCase } from '$lib/utils';
-	import type { Dayjs } from 'dayjs';
+	import dayjs from 'dayjs';
 	import { Timestamp } from 'firebase/firestore';
 
 	let dialog: HTMLDialogElement;
-	let date: Dayjs;
 
 	const terms: ScoreTerm[] = ['midterm', 'final'];
 	const types: ScoreFor[] = ['quiz', 'assignment', 'project', 'participation'];
@@ -22,20 +20,30 @@
 	let no: string | undefined;
 
 	async function onSave() {
-		if ($currentStudentUid && $selectedSubject) {
+		if ($selectedUid && $selectedSubject) {
+			const selected = $selectedDate;
+			let buf = dayjs();
+
+			if (!buf.isSame($selectedDate, 'day')) {
+				buf = buf
+					.set('year', selected.year())
+					.set('month', selected.month())
+					.set('date', selected.date());
+
+				console.log(buf.format('YYYY-MM-DD hh:mm A'));
+			}
+
 			const score: Score = {
-				owner: $currentStudentUid,
+				owner: $selectedUid,
 				perfect: Number(perfect),
 				for: $selectedSubject,
 				term,
 				type: scoreFor,
 				value: Number(value),
 				no: Number(no),
-				time: Timestamp.fromDate(new Date())
+				time: Timestamp.fromDate(buf.toDate())
 			};
-			const err = await saveDocument<Score>('scores', score);
-
-			console.log(err);
+			await saveDocument<Score>('scores', score);
 		}
 	}
 </script>

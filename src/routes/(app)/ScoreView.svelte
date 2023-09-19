@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { getScoresToView } from '$lib/utils';
-	import { date } from '$lib/stores/date';
-	import { currentScores } from '$lib/stores/my-details';
 	import { EventListTile } from '$lib/components';
+	import { scores as scoresStore, selectedDate } from '$lib/stores';
 
-	$: scores = getScoresToView($currentScores, $date.toDate());
+	$: scores = getScoresToView($scoresStore, $selectedDate.toDate());
 </script>
 
 <div class="flex flex-col gap-4 max-w-sm self-center w-full">

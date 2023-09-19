@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { saveDocument } from '$lib/services/client/firebase/db';
-	import { subjects } from '$lib/stores/subjects';
+	import { subjects } from '$lib/stores';
 
 	let code = '';
 	let title = '';

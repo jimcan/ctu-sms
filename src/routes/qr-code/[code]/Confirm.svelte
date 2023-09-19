@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { saveDocument } from '$lib/services/client/firebase/db';
-	import { studentsAttendance } from '$lib/stores/attendance';
+	import { attendance as attendanceStore } from '$lib/stores';
 	import dayjs from 'dayjs';
 	import { Timestamp } from 'firebase/firestore';
 	import { onMount } from 'svelte';
@@ -8,25 +8,23 @@
 	export let uid: string;
 	export let subject: string;
 
-	// $: attendances = $studentsAttendance;
-
 	let done = false;
 	let busy = false;
-	let attendance: Attendance | undefined;
+	let a: Attendance | undefined;
 
 	async function saveAttendance() {
-		if ($studentsAttendance.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
 			return (done = true);
 		}
 
 		busy = true;
-		attendance = {
+		a = {
 			for: subject,
 			owner: uid,
 			time: Timestamp.fromDate(new Date())
 		};
 
-		await saveDocument<Attendance>('attendance', attendance);
+		await saveDocument<Attendance>('attendance', a);
 		busy = false;
 	}
 
@@ -44,7 +42,7 @@
 {:else}
 	<div class="flex flex-col gap-2">
 		<h4 class="text-success italic">Attendance saved!</h4>
-		<p><strong>Subject :</strong> {attendance?.for}</p>
-		<p><strong>Time :</strong> {dayjs(attendance?.time.toDate()).format('hh:mm A')}</p>
+		<p><strong>Subject :</strong> {a?.for}</p>
+		<p><strong>Time :</strong> {dayjs(a?.time.toDate()).format('hh:mm A')}</p>
 	</div>
 {/if}

@@ -3,7 +3,7 @@
 	import { cn, timeToDisplay } from '$lib/utils';
 	import { deleteDocument } from '$lib/services/client/firebase/db';
 	import { ConfirmDialog } from '$lib/components';
-	import { schedules } from '$lib/stores/schedules';
+	import { schedules } from '$lib/stores';
 
 	async function onDelete(uid?: string) {
 		if (!uid) return;

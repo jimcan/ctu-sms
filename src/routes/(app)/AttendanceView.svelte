@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { displayDate, getAttendanceToView } from '$lib/utils';
-	import { date } from '$lib/stores/date';
-	import { currentAttendance } from '$lib/stores/my-details';
+	import { displayTime, getAttendanceToView } from '$lib/utils';
 	import { EventListTile } from '$lib/components';
+	import { attendance, selectedDate } from '$lib/stores';
 
-	$: attendanceToView = getAttendanceToView($currentAttendance, $date.toDate());
+	$: attendanceToView = getAttendanceToView($attendance, $selectedDate.toDate());
 </script>
 
 <div class="flex flex-col gap-4 max-w-sm self-center w-full">
@@ -16,7 +15,7 @@
 			</div>
 			<div class="flex gap-4">
 				<strong>Time :</strong>
-				<p>{displayDate(attendance.time.toDate(), 'hh:mm A')}</p>
+				<p>{displayTime(attendance.time.toDate())}</p>
 			</div>
 		</EventListTile>
 	{/each}

@@ -2,12 +2,9 @@
 	import { page } from '$app/stores';
 	import { Pen, Save, X } from 'lucide-svelte';
 	import { upload, updateDocument } from '$lib/services/client';
-	import { appState, setLoading } from '$lib/stores/app-state';
 
 	export let photoUrl = '';
 	export let imgName = '';
-
-	setLoading(false);
 
 	let dialog: HTMLDialogElement;
 	let input: HTMLInputElement;
@@ -33,8 +30,6 @@
 	}
 
 	const onUpload = async () => {
-		setLoading(true);
-
 		if (imgFile) {
 			const filename = `${imgName}.${imgFile.type.split('/')[1]}`;
 			imgFile = new File([imgFile], filename, { type: imgFile.type });
@@ -50,7 +45,6 @@
 			}
 		}
 
-		setLoading(false);
 		dialog.close();
 	};
 </script>
@@ -82,12 +76,8 @@
 			<button class="btn btn-ghost" type="button" on:click={() => dialog.close()}>
 				<X size={18} /> Close
 			</button>
-			<button disabled={$appState.loading} class="btn btn-accent" on:click={onUpload}>
-				{#if $appState.loading}
-					<Save size={18} /> Saving <span class="loading loading-dots loading-md" />
-				{:else}
-					<Save size={18} /> Save
-				{/if}
+			<button class="btn btn-accent" on:click={onUpload}>
+				<Save size={18} /> Save
 			</button>
 		</div>
 	</form>

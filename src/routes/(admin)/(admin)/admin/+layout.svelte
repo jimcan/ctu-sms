@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { signOut } from '$lib/services/client';
-	import { setLoading, setState } from '$lib/stores/app-state';
+	import { db, signOut } from '$lib/services/client';
 	import {
-		CalendarCheck,
 		CalendarCheck2,
 		FileText,
 		GanttChart,
@@ -14,23 +12,26 @@
 	} from 'lucide-svelte';
 	import { NavListTile, Avatar, AdminNav } from '$lib/components';
 	import { onMount } from 'svelte';
-	import { getDocument } from '$lib/services/client/firebase/db.js';
-	import { currentSchedule } from '$lib/stores/schedules.js';
-	import { sections, selectedSection } from '$lib/stores/sections.js';
-	import { selectedSubject, subjects } from '$lib/stores/subjects.js';
-	import { currentStudent } from '$lib/stores/my-details.js';
-	import { goto } from '$app/navigation';
+	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+	import { students, selectedUid, selectedSection, selectedSubject } from '$lib/stores/admin';
+	import { currentSchedule, currentStudent, subjects } from '$lib/stores';
 
 	export let data;
 
-	let student = $currentStudent;
 	let checked = false;
 
-	onMount(async () => {
-		if (!student) goto('/');
+	onMount(() => {
+		const cleanup = onSnapshot(query(collection(db, 'students'), orderBy('lastname')), (ss) => {
+			students.set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Student)));
+		});
 
+		selectedUid.set(data.userSession.uid);
 		selectedSection.set($currentSchedule?.section ?? 'All');
-		selectedSubject.set($currentSchedule?.subject ?? $subjects[0].uid);
+		selectedSubject.set($currentSchedule?.subject ?? $subjects.at(0)?.uid);
+
+		return () => {
+			cleanup();
+		};
 	});
 
 	async function onSignOut() {
@@ -56,7 +57,7 @@
 		<div class="flex flex-col w-80 min-h-full bg-base-200">
 			<div class="flex bg-gradient-to-br from-primary items-center justify-center to-accent w-full">
 				<div class="flex flex-col items-center p-8 gap-2 h-full justify-center">
-					<Avatar {student} size="2xl" outline="accent" />
+					<Avatar student={$currentStudent} size="2xl" outline="accent" />
 					<p class="md text-lg text-center">{data.userSession.email}</p>
 					<button class="btn btn-outline" on:click={onSignOut}>
 						<LogOut size={18} /> Sign out

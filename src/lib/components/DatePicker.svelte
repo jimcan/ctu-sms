@@ -4,29 +4,26 @@
 	import { cn } from '$lib/utils';
 	import RollingDigit from './RollingDigit.svelte';
 	import type { ChangeEventHandler } from 'svelte/elements';
-	import { date as dateStore } from '$lib/stores/date';
+	import { selectedDate } from '$lib/stores';
 
 	let dateInput: HTMLInputElement;
 
-	// export let date = dayjs();
-	$: date = $dateStore;
+	$: date = $selectedDate;
 
 	$: d = date.get('date');
 	$: m = date.get('month') + 1;
 	$: y = date.get('year');
 
 	function next() {
-		// date = date.add(1, 'day');
-		dateStore.update((d) => d.add(1, 'day'));
+		selectedDate.set(date.add(1, 'day'));
 	}
 
 	function prev() {
-		dateStore.update((d) => d.add(-1, 'day'));
-		// date = date.add(-1, 'day');
+		selectedDate.set(date.add(-1, 'day'));
 	}
 
 	const onDateInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		dateStore.set(dayjs(event.currentTarget.value));
+		date = dayjs(event.currentTarget.value);
 	};
 </script>
 
@@ -54,6 +51,6 @@
 		</button>
 	</div>
 	{#if !dayjs().isSame(date, 'day')}
-		<button class="btn w-full" on:click={() => dateStore.set(dayjs())}>Today</button>
+		<button class="btn w-full" on:click={() => selectedDate.set(dayjs())}>Today</button>
 	{/if}
 </div>

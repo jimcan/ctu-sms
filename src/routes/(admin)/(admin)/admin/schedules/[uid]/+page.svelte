@@ -3,21 +3,15 @@
 	import { onMount } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { saveDocument } from '$lib/services/client/firebase/db';
-	import { schedules as schedulesStore } from '$lib/stores/schedules';
-	import { sections as sectionsStore } from '$lib/stores/sections';
-	import { subjects as subjectsStore } from '$lib/stores';
+	import {
+		schedules as schedulesStore,
+		sections as sectionsStore,
+		subjects as subjectsStore
+	} from '$lib/stores';
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import dayjs from 'dayjs';
-	import {
-		dateStringToScheduleTime,
-		mwf,
-		scheduleDays,
-		ssa,
-		timeFromSchedule,
-		tth
-	} from '$lib/utils';
+	import { dateStringToScheduleTime, mwf, ssa, timeFromSchedule, tth } from '$lib/utils';
 
-	// const scheduleDays: ScheduleDay[] = ['M', 'T', 'W', 'Th', 'F'];
 	let sections = $sectionsStore;
 	let subjects = $subjectsStore;
 	let schedules = $schedulesStore;

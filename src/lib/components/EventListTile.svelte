@@ -6,7 +6,15 @@
 	export let onClose: VoidFunction | undefined = undefined;
 </script>
 
-<div class={cn('flex', 'bg-base-200', 'rounded-lg', 'hover:drop-shadow-[0_0_4px_#3d98ff]')}>
+<div
+	class={cn(
+		'flex',
+		'bg-base-200',
+		'rounded-lg',
+		'max-w-sm w-full',
+		'hover:drop-shadow-[0_0_4px_#3d98ff]'
+	)}
+>
 	<div
 		class={cn('flex items-center justify-center', 'w-10', 'rounded-l-lg', {
 			'bg-accent/50': type === 'attendance',
@@ -20,7 +28,7 @@
 	</div>
 	{#if onClose}
 		<div class="flex p-2">
-			<button class="btn btn-sm btn-circle btn-ghost"><X size={18} /></button>
+			<button class="btn btn-sm btn-circle btn-ghost" on:click={onClose}><X size={18} /></button>
 		</div>
 	{/if}
 </div>

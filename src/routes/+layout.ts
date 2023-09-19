@@ -4,7 +4,7 @@ import { browser } from '$app/environment';
 import { initFirebase } from '$lib/services/client';
 import { PUBLIC_FIREBASE_CLIENT_CONFIG } from '$env/static/public';
 
-export const load: LayoutLoad = async ({ data: { appError } }) => {
+export const load: LayoutLoad = async ({ data: { userSession } }) => {
 	if (browser) {
 		try {
 			initFirebase(JSON.parse(PUBLIC_FIREBASE_CLIENT_CONFIG));
@@ -13,5 +13,5 @@ export const load: LayoutLoad = async ({ data: { appError } }) => {
 		}
 	}
 
-	return { appError };
+	return { userSession };
 };

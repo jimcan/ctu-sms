@@ -45,7 +45,7 @@
 		<div class={cls}>
 			{#if student}
 				<span class="text-lg font-semibold">
-					{getInitials(student.name ?? '') ?? 'NN'}
+					{getInitials(`${student.firstname} ${student.lastname}`) ?? 'NN'}
 				</span>
 			{:else}
 				<User2 />

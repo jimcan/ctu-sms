@@ -1,24 +1,17 @@
 <script lang="ts">
 	import type { ChangeEventHandler } from 'svelte/elements.js';
-	import { appState, setLoading, setState } from '$lib/stores/app-state';
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
 	import { updateDocument, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
-	import {
-		currentStudent,
-		sections as sectionsStore,
-		subjects as subjectsStore
-	} from '$lib/stores';
 	import { Avatar } from '$lib/components';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
+	import { currentStudent, sections, subjects } from '$lib/stores';
 
 	export let data;
 
-	setLoading(false);
-
-	let sections = $sectionsStore;
-	let subjects = $subjectsStore;
+	let secs = $sections;
+	let subs = $subjects;
 
 	let subjectCodes: string[] = [];
 	let editing = false;
@@ -27,7 +20,7 @@
 	let idNumber = '';
 	let sectionCode = '';
 
-	$: student = $currentStudent?.value;
+	$: student = $currentStudent;
 	$: student && setInitialValues();
 
 	const setInitialValues = () => {
@@ -39,7 +32,6 @@
 	};
 
 	const handleSubmit = async () => {
-		setLoading(true);
 		await updateDocument<Student>('students', data.userSession.uid, {
 			firstname: fname,
 			lastname: lname,
@@ -49,7 +41,6 @@
 		});
 
 		editing = false;
-		setLoading(false);
 	};
 
 	const handleSubjectSelect: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -63,11 +54,7 @@
 	};
 
 	async function onSignOut() {
-		setLoading(true);
-		const error = await signOut();
-		setLoading(false);
-
-		if (error) setState(error);
+		await signOut();
 	}
 </script>
 
@@ -102,14 +89,14 @@
 				</LabeledInput>
 				<LabeledSelect disabled={!editing} bind:value={sectionCode} label="Section">
 					<Users2 slot="prefix-icon" size={18} />
-					{#each sections as section}
+					{#each secs as section}
 						<option value={section.uid}>{section.name}</option>
 					{/each}
 				</LabeledSelect>
 				<div class="form-control">
 					<p class="label">Subjects</p>
 					<div class={`rounded-lg px-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>
-						{#each subjects as subject}
+						{#each subs as subject}
 							<div class="flex">
 								<input
 									type="checkbox"
@@ -151,14 +138,10 @@
 					</button>
 					<button
 						class="btn btn-accent sm:btn-md btn-sm"
-						disabled={!editing || $appState.loading}
+						disabled={!editing}
 						on:click={handleSubmit}
 					>
-						{#if $appState.loading}
-							<Save size={18} /> Saving <span class="loading loading-dots loading-md" />
-						{:else}
-							<Save size={18} /> Save
-						{/if}
+						<Save size={18} /> Save
 					</button>
 				</div>
 			</form>
