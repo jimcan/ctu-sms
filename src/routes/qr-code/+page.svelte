@@ -5,15 +5,15 @@
 	import DatePicker from '$lib/components/DatePicker.svelte';
 	import dayjs from 'dayjs';
 	import { hash } from '$lib/utils';
-	import { currentSchedule, subjects } from '$lib/stores';
+	import { currentSchedule, selectedDate, subjects } from '$lib/stores';
 
 	let qrcode: HTMLImageElement;
-	let date = dayjs();
+	// let date = dayjs();
 	let text: string | undefined = '';
 
 	// $: subjects = $subjectsStore;
 	$: subject = $currentSchedule?.subject ?? $subjects.at(0)?.uid;
-	$: subject && date && generate();
+	$: subject, $selectedDate, generate();
 
 	const generateQR = async (text: string) => {
 		try {
@@ -24,7 +24,7 @@
 	};
 
 	async function generate() {
-		const hashedNow = await hash(date.format('YYYY-MM-DD'));
+		const hashedNow = await hash($selectedDate.format('YYYY-MM-DD'));
 
 		text = `/qr-code/${hashedNow}?subject=${subject}`;
 		await generateQR(text);
