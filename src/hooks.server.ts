@@ -14,7 +14,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			uid,
 			name,
 			email,
-			admin: email === 'jimcan051592@gmail.com' || email === 'jimcan009@gmail.com'
+			admin: email === 'jimcan051592@gmail.com'
 		};
 
 		if (!(await exists('students', uid))) {
