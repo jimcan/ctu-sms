@@ -13,7 +13,7 @@
 	let a: Attendance | undefined;
 
 	async function saveAttendance() {
-		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day'))) {
+		if ($attendanceStore.some((a) => a.for === subject && dayjs().isSame(a.time.toDate(), 'day'))) {
 			return (done = true);
 		}
 
