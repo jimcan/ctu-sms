@@ -8,6 +8,8 @@ import { writable, type Readable, derived, readable } from 'svelte/store';
 
 export const selectedDate = writable<Dayjs>(dayjs());
 export const currentUid = writable<string | undefined>();
+export const attendance = writable<Attendance[]>([]);
+export const scores = writable<Score[]>([]);
 
 export const currentStudent: Readable<Student | undefined> = derived(currentUid, (uid, set) => {
 	let unsub: () => void;
@@ -25,35 +27,35 @@ export const currentStudent: Readable<Student | undefined> = derived(currentUid,
 	};
 });
 
-export const attendance: Readable<Attendance[]> = derived(currentUid, (uid, set) => {
-	set([]);
-	let unsub: () => void;
+// export const attendance: Readable<Attendance[]> = derived(currentUid, (uid, set) => {
+// 	set([]);
+// 	let unsub: () => void;
 
-	if (browser && uid) {
-		unsub = onSnapshot(query(collection(db, 'attendance'), where('owner', '==', uid)), (ss) => {
-			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Attendance)));
-		});
-	}
+// 	if (browser && uid) {
+// 		unsub = onSnapshot(query(collection(db, 'attendance'), where('owner', '==', uid)), (ss) => {
+// 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Attendance)));
+// 		});
+// 	}
 
-	return () => {
-		if (unsub) return unsub();
-	};
-});
+// 	return () => {
+// 		if (unsub) return unsub();
+// 	};
+// });
 
-export const scores: Readable<Score[]> = derived(currentUid, (uid, set) => {
-	set([]);
-	let unsub: () => void;
+// export const scores: Readable<Score[]> = derived(currentUid, (uid, set) => {
+// 	set([]);
+// 	let unsub: () => void;
 
-	if (browser && uid) {
-		unsub = onSnapshot(query(collection(db, 'scores'), where('owner', '==', uid)), (ss) => {
-			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Score)));
-		});
-	}
+// 	if (browser && uid) {
+// 		unsub = onSnapshot(query(collection(db, 'scores'), where('owner', '==', uid)), (ss) => {
+// 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Score)));
+// 		});
+// 	}
 
-	return () => {
-		if (unsub) return unsub();
-	};
-});
+// 	return () => {
+// 		if (unsub) return unsub();
+// 	};
+// });
 
 export const schedules = readable<Schedule[]>([], (set) => {
 	let unsub: () => void;
