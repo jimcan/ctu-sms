@@ -8,23 +8,29 @@
 	export let uid: string;
 	export let subject: string;
 
+	$: aStore = $attendanceStore;
+
 	let done = false;
 	let busy = false;
-	let a: Attendance | undefined;
+	let attendance: Attendance | undefined;
+
+	function aIsToday(a: Attendance) {
+		return dayjs().isSame(a.time.toDate(), 'day') && a.for === subject;
+	}
 
 	async function saveAttendance() {
-		if ($attendanceStore.some((a) => dayjs().isSame(a.time.toDate(), 'day') && a.for === subject)) {
+		if (aStore.some((a) => aIsToday(a))) {
 			return (done = true);
 		}
 
 		busy = true;
-		a = {
+		attendance = {
 			for: subject,
 			owner: uid,
 			time: Timestamp.fromDate(new Date())
 		};
 
-		await saveDocument<Attendance>('attendance', a);
+		await saveDocument<Attendance>('attendance', attendance);
 		busy = false;
 	}
 
@@ -42,7 +48,7 @@
 {:else}
 	<div class="flex flex-col gap-2">
 		<h4 class="text-success italic">Attendance saved!</h4>
-		<p><strong>Subject :</strong> {a?.for}</p>
-		<p><strong>Time :</strong> {dayjs(a?.time.toDate()).format('hh:mm A')}</p>
+		<p><strong>Subject :</strong> {attendance?.for}</p>
+		<p><strong>Time :</strong> {dayjs(attendance?.time.toDate()).format('hh:mm A')}</p>
 	</div>
 {/if}
