@@ -26,13 +26,14 @@ export const currentStudent: Readable<Student | undefined> = derived(currentUid,
 });
 
 export const attendance: Readable<Attendance[]> = derived(currentUid, (uid, set) => {
+	set([]);
 	let unsub: () => void;
 
 	if (browser && uid) {
 		unsub = onSnapshot(query(collection(db, 'attendance'), where('owner', '==', uid)), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Attendance)));
 		});
-	} else set([]);
+	}
 
 	return () => {
 		if (unsub) return unsub();
@@ -40,13 +41,14 @@ export const attendance: Readable<Attendance[]> = derived(currentUid, (uid, set)
 });
 
 export const scores: Readable<Score[]> = derived(currentUid, (uid, set) => {
+	set([]);
 	let unsub: () => void;
 
 	if (browser && uid) {
 		unsub = onSnapshot(query(collection(db, 'scores'), where('owner', '==', uid)), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Score)));
 		});
-	} else set([]);
+	}
 
 	return () => {
 		if (unsub) return unsub();
@@ -60,7 +62,7 @@ export const schedules = readable<Schedule[]>([], (set) => {
 		unsub = onSnapshot(collection(db, 'schedules'), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Schedule)));
 		});
-	} else set([]);
+	}
 
 	return () => {
 		if (unsub) return unsub();
@@ -73,7 +75,7 @@ export const sections = readable<Section[]>([], (set) => {
 		unsub = onSnapshot(collection(db, 'sections'), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Section)));
 		});
-	} else set([]);
+	}
 
 	return () => {
 		if (unsub) return unsub();
@@ -87,7 +89,7 @@ export const subjects = readable<Subject[]>([], (set) => {
 		unsub = onSnapshot(collection(db, 'subjects'), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Subject)));
 		});
-	} else set([]);
+	}
 
 	return () => {
 		if (unsub) return unsub();
