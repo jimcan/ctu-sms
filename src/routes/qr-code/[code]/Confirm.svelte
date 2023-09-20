@@ -40,7 +40,7 @@
 </script>
 
 {#if done}
-	<p>You've already scanned this Attendance QR.</p>
+	<p class="text-warning">You've already scanned this Attendance QR.</p>
 {:else if busy}
 	<span>
 		Saving attendance <div class="loading loading-dots loading-md" />
