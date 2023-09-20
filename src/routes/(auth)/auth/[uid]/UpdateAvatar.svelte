@@ -12,6 +12,8 @@
 
 	let imgFile: File | null = null;
 
+	let busy = false;
+
 	function onChange() {
 		if (input.files) {
 			imgFile = input.files[0];
@@ -31,6 +33,8 @@
 
 	const onUpload = async () => {
 		if (imgFile) {
+			busy = true;
+
 			const filename = `${imgName}.${imgFile.type.split('/')[1]}`;
 			imgFile = new File([imgFile], filename, { type: imgFile.type });
 			const { url, error } = await upload(imgFile);
@@ -43,6 +47,8 @@
 					if (err) console.log(err);
 				}
 			}
+
+			busy = false;
 		}
 
 		dialog.close();
@@ -76,8 +82,12 @@
 			<button class="btn btn-ghost" type="button" on:click={() => dialog.close()}>
 				<X size={18} /> Close
 			</button>
-			<button class="btn btn-accent" on:click={onUpload}>
-				<Save size={18} /> Save
+			<button class="btn btn-accent" on:click={onUpload} disabled={busy}>
+				{#if busy}
+					<Save size={18} /> Saving <span class="loading loading-dots loading-sm" />
+				{:else}
+					<Save size={18} /> Save
+				{/if}
 			</button>
 		</div>
 	</form>

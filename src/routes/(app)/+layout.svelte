@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { Theme } from '$lib/components';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { isAdmin, currentStudent } from '$lib/stores';
+	import { currentStudent } from '$lib/stores';
 	import { UserCog2 } from 'lucide-svelte';
+
+	export let data;
+
+	$: isAdmin = data.userSession?.admin;
 </script>
 
 <div class="flex flex-col min-h-[100dvh]">
@@ -15,7 +19,7 @@
 			<div class="navbar-end pr-2 sm:pr-6 xl:pr-0 gap-4">
 				<Theme />
 
-				{#if $isAdmin}
+				{#if isAdmin}
 					<a href="/admin" class="btn btn-outline btn-circle btn-ghost">
 						<UserCog2 />
 					</a>

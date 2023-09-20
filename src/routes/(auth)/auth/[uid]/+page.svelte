@@ -10,8 +10,8 @@
 
 	export let data;
 
-	let secs = $sections;
-	let subs = $subjects;
+	$: secs = $sections;
+	$: subs = $subjects;
 
 	let subjectCodes: string[] = [];
 	let editing = false;
@@ -19,6 +19,13 @@
 	let lname = '';
 	let idNumber = '';
 	let sectionCode = '';
+
+	let busy = false;
+	$: {
+		if (busy) {
+			editing = false;
+		}
+	}
 
 	$: student = $currentStudent;
 	$: student && setInitialValues();
@@ -32,6 +39,8 @@
 	};
 
 	const handleSubmit = async () => {
+		busy = true;
+
 		await updateDocument<Student>('students', data.userSession.uid, {
 			firstname: fname,
 			lastname: lname,
@@ -39,6 +48,8 @@
 			sectionCode,
 			subjectCodes
 		});
+
+		busy = false;
 
 		editing = false;
 	};
@@ -54,7 +65,9 @@
 	};
 
 	async function onSignOut() {
+		busy = true;
 		await signOut();
+		busy = false;
 	}
 </script>
 
@@ -141,7 +154,11 @@
 						disabled={!editing}
 						on:click={handleSubmit}
 					>
-						<Save size={18} /> Save
+						{#if busy}
+							<Save size={18} /> Saving <span class="loading loading-dots loading-sm" />
+						{:else}
+							<Save size={18} /> Save
+						{/if}
 					</button>
 				</div>
 			</form>
