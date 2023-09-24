@@ -3,9 +3,7 @@
 	import { deleteDocument } from '$lib/services/client';
 	import { selectedDate } from '$lib/stores';
 	import { selectedScores } from '$lib/stores/admin';
-	import { getScoresToView } from '$lib/utils';
-
-	$: console.log($selectedScores);
+	import { getScoresToView, toTitleCase } from '$lib/utils';
 
 	$: scoresToView = getScoresToView($selectedScores, $selectedDate.toDate());
 
@@ -22,13 +20,13 @@
 		</div>
 		{#if score.no}
 			<div class="flex gap-4">
-				<strong>{score.type} # :</strong>
+				<strong>{toTitleCase(score.type)} # :</strong>
 				<p>{score.no}</p>
 			</div>
 		{:else}
 			<div class="flex gap-4">
 				<strong>Type :</strong>
-				<p>{score.type}</p>
+				<p>{toTitleCase(score.type)}</p>
 			</div>
 		{/if}
 		<div class="flex gap-4">

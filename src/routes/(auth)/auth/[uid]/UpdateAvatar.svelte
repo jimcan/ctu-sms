@@ -37,14 +37,12 @@
 
 			const filename = `${imgName}.${imgFile.type.split('/')[1]}`;
 			imgFile = new File([imgFile], filename, { type: imgFile.type });
-			const { url, error } = await upload(imgFile);
-			if (error) console.log(error);
+			const { url } = await upload(imgFile);
 
 			if (url) {
 				const uid = $page.data.userSession?.uid;
 				if (uid) {
-					const err = await updateDocument<Student>('students', uid, { photoUrl: url });
-					if (err) console.log(err);
+					await updateDocument<Student>('students', uid, { photoUrl: url });
 				}
 			}
 

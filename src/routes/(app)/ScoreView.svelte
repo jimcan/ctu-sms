@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getScoresToView } from '$lib/utils';
+	import { getScoresToView, toTitleCase } from '$lib/utils';
 	import { EventListTile } from '$lib/components';
 	import { scores as scoresStore, selectedDate } from '$lib/stores';
 
@@ -15,13 +15,13 @@
 			</div>
 			{#if score.no}
 				<div class="flex gap-4">
-					<strong>{score.type} # :</strong>
+					<strong>{toTitleCase(score.type)} # :</strong>
 					<p>{score.no}</p>
 				</div>
 			{:else}
 				<div class="flex gap-4">
 					<strong>Type :</strong>
-					<p>{score.type}</p>
+					<p>{toTitleCase(score.type)}</p>
 				</div>
 			{/if}
 			<div class="flex gap-4">

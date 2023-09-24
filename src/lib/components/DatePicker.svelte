@@ -23,7 +23,7 @@
 	}
 
 	const onDateInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		date = dayjs(event.currentTarget.value);
+		selectedDate.set(dayjs(event.currentTarget.value));
 	};
 </script>
 

@@ -14,20 +14,21 @@
 	import { onMount } from 'svelte';
 	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 	import { students, selectedUid, selectedSection, selectedSubject } from '$lib/stores/admin';
-	import { currentSchedule, currentStudent, subjects } from '$lib/stores';
+	import { currentSchedule, currentStudent, currentUid, subjects } from '$lib/stores';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
 	let checked = false;
 
+	$: selectedUid.set(data.userSession.uid);
+	$: selectedSection.set($currentSchedule?.section ?? 'All');
+	$: selectedSubject.set($currentSchedule?.subject ?? $subjects.at(0)?.uid);
+
 	onMount(() => {
 		const cleanup = onSnapshot(query(collection(db, 'students'), orderBy('lastname')), (ss) => {
 			students.set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Student)));
 		});
-
-		selectedUid.set(data.userSession.uid);
-		selectedSection.set($currentSchedule?.section ?? 'All');
-		selectedSubject.set($currentSchedule?.subject ?? $subjects.at(0)?.uid);
 
 		return () => {
 			cleanup();
@@ -35,7 +36,9 @@
 	});
 
 	async function onSignOut() {
+		currentUid.set(null);
 		await signOut();
+		goto('/');
 	}
 </script>
 

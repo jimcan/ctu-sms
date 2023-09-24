@@ -23,7 +23,7 @@
 		<AttendanceView />
 		<ScoreView />
 	</div>
-{:else if data.userSession && !$currentStudent}
+{:else if data.userSession && $currentStudent !== null}
 	<div class="flex flex-col flex-1 items-center justify-center">
 		<h3 class="md:text-xl md:font-semibold flex items-center gap-2">
 			Loading data. Please wait

@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { signinWithGoogle } from '$lib/services/client';
 
+	let busy = false;
+
 	const onSignin = async () => {
+		busy = true;
 		await signinWithGoogle();
+		busy = false;
 	};
 </script>
 
@@ -34,6 +38,7 @@
 			<button
 				class="btn w-full max-w-md bg-slate-50 hover:bg-slate-400 text-slate-900 mt-6 mb-2"
 				on:click={onSignin}
+				disabled={busy}
 			>
 				<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
 					<path
@@ -54,7 +59,11 @@
 					/>
 					<path d="M1 1h22v22H1z" fill="none" />
 				</svg>
-				Sign in with Google
+				{#if busy}
+					Signing in <span class="loading loading-dots" />
+				{:else}
+					Sign in with Google
+				{/if}
 			</button>
 			<p class="leading-tight text-center">
 				By signin in you agree on our

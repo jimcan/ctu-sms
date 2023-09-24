@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { themes } from '$lib/themes';
 	import { cn } from '$lib/utils';
-	import { Check, ChevronDown, Palette } from 'lucide-svelte';
+	import { Check, Palette } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let current_theme = 'dark';
@@ -62,4 +62,3 @@
 		</div>
 	</ul>
 </div>
-<!-- </div> -->

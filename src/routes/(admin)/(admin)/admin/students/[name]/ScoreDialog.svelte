@@ -2,7 +2,7 @@
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 	import { saveDocument } from '$lib/services/client';
-	import { subjects, selectedDate } from '$lib/stores';
+	import { selectedDate } from '$lib/stores';
 	import { selectedSubject, selectedUid } from '$lib/stores/admin';
 	import { cn, toTitleCase } from '$lib/utils';
 	import dayjs from 'dayjs';
@@ -29,8 +29,6 @@
 					.set('year', selected.year())
 					.set('month', selected.month())
 					.set('date', selected.date());
-
-				console.log(buf.format('YYYY-MM-DD hh:mm A'));
 			}
 
 			const score: Score = {
@@ -53,17 +51,6 @@
 	<form method="dialog" class="modal-box flex flex-col gap-2 max-w-fit">
 		<h3 class="font-bold text-lg">Score</h3>
 		<div class="flex gap-2">
-			<LabeledSelect
-				label="Subject"
-				class="select-bordered"
-				value={$selectedSubject}
-				on:change={(e) => selectedSubject.set(e.currentTarget.value)}
-			>
-				{#each $subjects as sub}
-					<option value={sub.uid}>{sub.uid}</option>
-				{/each}
-			</LabeledSelect>
-
 			<LabeledSelect label="Term" class="select-bordered" bind:value={term}>
 				{#each terms as t}
 					<option value={t}>{toTitleCase(t)}</option>

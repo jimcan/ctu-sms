@@ -49,3 +49,4 @@
 	</div>
 	<button disabled={!ns} class="btn" on:click={onNext}><SkipForward /></button>
 </div>
+<p>{cs?.value.uid}</p>

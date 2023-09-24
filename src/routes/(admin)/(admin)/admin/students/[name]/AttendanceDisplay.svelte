@@ -5,8 +5,6 @@
 	import { selectedAttendance } from '$lib/stores/admin';
 	import { displayTime, getAttendanceToView } from '$lib/utils';
 
-	$: console.log($selectedAttendance);
-
 	$: attendanceToView = getAttendanceToView($selectedAttendance, $selectedDate.toDate());
 
 	async function onDelete(uid?: string) {

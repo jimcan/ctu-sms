@@ -8,10 +8,8 @@
 	import { currentSchedule, selectedDate, subjects } from '$lib/stores';
 
 	let qrcode: HTMLImageElement;
-	// let date = dayjs();
 	let text: string | undefined = '';
 
-	// $: subjects = $subjectsStore;
 	$: subject = $currentSchedule?.subject ?? $subjects.at(0)?.uid;
 	$: subject, $selectedDate, generate();
 

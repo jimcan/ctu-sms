@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
-	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 	import { saveDocument } from '$lib/services/client';
-	import { subjects, selectedDate } from '$lib/stores';
+	import { selectedDate } from '$lib/stores';
 	import { selectedSubject, selectedUid } from '$lib/stores/admin';
 	import { cn, dateStringToScheduleTime } from '$lib/utils';
 	import dayjs from 'dayjs';
@@ -54,16 +53,6 @@
 				disableClearButton
 			/>
 		{/if}
-		<LabeledSelect
-			label="Subject"
-			class="select-bordered"
-			value={$selectedSubject}
-			on:change={(e) => selectedSubject.set(e.currentTarget.value)}
-		>
-			{#each $subjects as sub}
-				<option value={sub.uid}>{sub.uid}</option>
-			{/each}
-		</LabeledSelect>
 		<LabeledInput label="Reason" bind:value={reason} class="input-bordered" />
 		<div class="modal-action">
 			<button class="btn btn-ghost">Cancel</button>

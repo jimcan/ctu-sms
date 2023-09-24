@@ -30,7 +30,7 @@
 				</span>
 				<span class="flex">
 					<strong class="w-24">Days :</strong>
-					<p>{sched.days}</p>
+					<p>{sched.days.join('')}</p>
 				</span>
 				<span class="flex">
 					<strong class="w-24">Start :</strong>

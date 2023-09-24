@@ -6,7 +6,7 @@
 	import { Avatar } from '$lib/components';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
-	import { currentStudent, sections, subjects } from '$lib/stores';
+	import { currentStudent, currentUid, sections, subjects } from '$lib/stores';
 
 	export let data;
 
@@ -56,8 +56,6 @@
 
 	const handleSubjectSelect: ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (e.currentTarget.checked) {
-			console.log(e.currentTarget.value);
-
 			subjectCodes.push(e.currentTarget.value);
 		} else {
 			subjectCodes = subjectCodes.filter((sc) => sc !== e.currentTarget.value);
@@ -66,6 +64,7 @@
 
 	async function onSignOut() {
 		busy = true;
+		currentUid.set(null);
 		await signOut();
 		busy = false;
 	}
