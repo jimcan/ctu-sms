@@ -5,8 +5,11 @@
 	import DatePicker from '$lib/components/DatePicker.svelte';
 	import ScoreDialog from './ScoreDialog.svelte';
 	import ScoreDisplay from './ScoreDisplay.svelte';
-	import { selectedSubject } from '$lib/stores/admin';
-	import { subjects } from '$lib/stores';
+	import { selectedStudent, selectedSubject } from '$lib/stores/admin';
+	import { currentSchedule } from '$lib/stores';
+
+	$: subjects = $selectedStudent?.value.subjectCodes ?? [];
+	$: selectedSubject.set($currentSchedule?.subject ?? subjects.at(0));
 </script>
 
 <div class="flex flex-col w-full max-w-[100dvw] p-4 items-center gap-2">
@@ -21,8 +24,8 @@
 			value={$selectedSubject}
 			on:change={(e) => selectedSubject.set(e.currentTarget.value)}
 		>
-			{#each $subjects as sub}
-				<option value={sub.uid}>{sub.uid}</option>
+			{#each subjects as sub}
+				<option value={sub}>{sub}</option>
 			{/each}
 		</select>
 	</div>
