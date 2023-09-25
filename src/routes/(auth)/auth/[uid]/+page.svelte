@@ -28,16 +28,14 @@
 	}
 
 	$: student = $currentStudent;
-	$: student, setInitialValues();
+	$: student && setInitialValues();
 
 	const setInitialValues = () => {
-		if (student) {
-			fname = student.firstname ?? '';
-			lname = student.lastname ?? '';
-			idNumber = student.idNumber?.toString() ?? '';
-			sectionCode = student.sectionCode ?? '';
-			subjectCodes = student.subjectCodes ?? [];
-		}
+		fname = student?.firstname ?? '';
+		lname = student?.lastname ?? '';
+		idNumber = student?.idNumber?.toString() ?? '';
+		sectionCode = student?.sectionCode ?? '';
+		subjectCodes = student?.subjectCodes ?? [];
 	};
 
 	const handleSubmit = async () => {
