@@ -3,14 +3,14 @@
 	import { Baseline, ChevronsLeft, Hash, LogOut, PenSquare, Save, Users2, X } from 'lucide-svelte';
 	import { updateDocument, signOut } from '$lib/services/client';
 	import UpdateAvatar from './UpdateAvatar.svelte';
-	import { Avatar } from '$lib/components';
+	import { Avatar, Select } from '$lib/components';
 	import { LabeledInput } from '$lib/components/ui/labeled-input';
 	import { LabeledSelect } from '$lib/components/ui/labeled-select';
 	import { currentStudent, currentUid, sections, subjects } from '$lib/stores';
 
 	export let data;
 
-	$: secs = $sections;
+	$: secs = $sections.map((s) => s.uid ?? '');
 	$: subs = $subjects;
 
 	let subjectCodes: string[] = [];
@@ -28,7 +28,7 @@
 	}
 
 	$: student = $currentStudent;
-	$: student && setInitialValues();
+	$: if (student) setInitialValues();
 
 	const setInitialValues = () => {
 		fname = student?.firstname ?? '';
@@ -80,7 +80,11 @@
 			<div class="flex flex-col items-center p-8 gap-2 h-full justify-center">
 				<div class="flex relative">
 					<Avatar {student} size="4xl" outline="accent" />
-					<UpdateAvatar photoUrl={student?.photoUrl} imgName="{sectionCode}/{fname} {lname}" />
+					<UpdateAvatar
+						photoUrl={student?.photoUrl}
+						imgName="{fname} {lname}"
+						section={sectionCode}
+					/>
 				</div>
 				<p class="md text-lg text-center">{data.userSession.email}</p>
 				<button class="btn btn-outline" on:click={onSignOut}><LogOut size={18} /> Sign out</button>
@@ -99,12 +103,9 @@
 				<LabeledInput disabled={!editing} bind:value={lname} label="Last Name">
 					<Baseline slot="prefix-icon" size={18} />
 				</LabeledInput>
-				<LabeledSelect disabled={!editing} bind:value={sectionCode} label="Section">
+				<Select label="Section" bind:value={sectionCode} items={secs}>
 					<Users2 slot="prefix-icon" size={18} />
-					{#each secs as section}
-						<option value={section.uid}>{section.name}</option>
-					{/each}
-				</LabeledSelect>
+				</Select>
 				<div class="form-control">
 					<p class="label">Subjects</p>
 					<div class={`rounded-lg px-4 w-full${editing ? ' bg-base-100' : ' bg-base-200'}`}>

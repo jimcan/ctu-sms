@@ -99,6 +99,19 @@ declare global {
 		perfect: number;
 		value: number;
 	}
+
+	type AppResourceType = 'file' | 'link';
+
+	interface AppResource {
+		uid?: string;
+		url: string;
+		type: AppResourceType;
+		linkId?: string;
+		filename?: string;
+		title: string;
+		description?: string;
+		subject: string;
+	}
 }
 
 export {};

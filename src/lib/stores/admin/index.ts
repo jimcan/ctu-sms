@@ -72,3 +72,17 @@ export const selectedScores: Readable<Score[]> = derived(
 		});
 	}
 );
+
+export const selectedResources: Readable<AppResource[]> = derived(selectedSubject, (sub, set) => {
+	if (!sub) return set([]);
+
+	const q = query(collection(db, 'resources'), where('subject', '==', sub));
+
+	onSnapshot(q, (snapshot) => {
+		set(
+			snapshot.docs.map((d) => {
+				return { uid: d.id, ...d.data() } as AppResource;
+			})
+		);
+	});
+});

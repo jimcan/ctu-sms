@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Select from './SectionSelect.svelte';
+
 	import { db, signOut } from '$lib/services/client';
 	import {
 		CalendarCheck2,
@@ -14,16 +16,23 @@
 	import { onMount } from 'svelte';
 	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 	import { students, selectedUid, selectedSection, selectedSubject } from '$lib/stores/admin';
-	import { currentSchedule, currentStudent, currentUid, subjects } from '$lib/stores';
+	import { currentSchedule, currentStudent, currentUid, sections, subjects } from '$lib/stores';
 	import { goto } from '$app/navigation';
 
 	export let data;
 
+	let section = '';
+	let subject = '';
 	let checked = false;
 
+	$: sectionUids = $sections.map((s) => s.uid ?? '');
+	$: subjectUids = $subjects.map((s) => s.uid ?? '');
+
 	$: selectedUid.set(data.userSession.uid);
-	$: if (!$selectedSection) selectedSection.set($currentSchedule?.section);
-	$: if (!$selectedSubject) selectedSubject.set($currentSchedule?.subject);
+	$: if (section) selectedSection.set(section);
+	$: if (subject) selectedSubject.set(subject);
+	$: if (!section) section = $currentSchedule?.section ?? $sections.at(0)?.uid ?? 'All';
+	$: if (!subject) subject = $currentSchedule?.subject ?? $subjects.at(0)?.uid ?? '';
 
 	onMount(() => {
 		const cleanup = onSnapshot(query(collection(db, 'students'), orderBy('lastname')), (ss) => {
@@ -42,7 +51,7 @@
 	}
 </script>
 
-<div class="drawer lg:drawer-open">
+<div class="drawer lg:drawer-open min-h-[100dvh]">
 	<input id="admin-drawer" bind:checked type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col">
 		<div class="w-full max-w-[100dvw] navbar bg-base-300 border-b border-base-content">
@@ -53,7 +62,14 @@
 			</div>
 			<AdminNav />
 		</div>
-		<slot />
+		<div class="flex-1">
+			<slot />
+		</div>
+		<div class="flex bg-base-300 sticky bottom-0 p-4 gap-4">
+			<Select label="Section" bind:value={section} items={['All', ...sectionUids]} />
+			<!-- <Select label="Section" bind:value={section} items={sectionUids} /> -->
+			<Select label="Subject" bind:value={subject} items={subjectUids} />
+		</div>
 	</div>
 	<div class="drawer-side">
 		<label for="admin-drawer" class="drawer-overlay" />

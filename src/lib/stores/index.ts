@@ -3,13 +3,14 @@ import { db } from '$lib/services/client';
 import { scheduleInTime } from '$lib/utils';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { writable, type Readable, derived, readable } from 'svelte/store';
 
 export const selectedDate = writable<Dayjs>(dayjs());
 export const currentUid = writable<string | undefined | null>();
 export const attendance = writable<Attendance[]>([]);
 export const scores = writable<Score[]>([]);
+export const currentSubject = writable<string | undefined>();
 
 export const currentStudent: Readable<Student | undefined | null> = derived(
 	currentUid,
@@ -65,6 +66,21 @@ export const subjects = readable<Subject[]>([], (set) => {
 	if (browser) {
 		unsub = onSnapshot(collection(db, 'subjects'), (ss) => {
 			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as Subject)));
+		});
+	}
+
+	return () => {
+		if (unsub) return unsub();
+	};
+});
+
+export const resources: Readable<AppResource[]> = derived(currentSubject, (sub, set) => {
+	let unsub: VoidFunction;
+	if (!sub) return set([]);
+
+	if (browser && sub) {
+		unsub = onSnapshot(query(collection(db, 'resources'), where('subject', '==', sub)), (ss) => {
+			set(ss.docs.map((d) => ({ ...d.data(), uid: d.id } as AppResource)));
 		});
 	}
 

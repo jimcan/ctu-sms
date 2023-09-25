@@ -1,13 +1,15 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { currentSchedule, sections, subjects } from '$lib/stores';
-	import { studentsBySection } from '$lib/stores/admin';
+	import { selectedResources, studentsBySection } from '$lib/stores/admin';
 	import { timeToDisplay, toName } from '$lib/utils';
-	import { FileText, TimerOff, Users2 } from 'lucide-svelte';
+	import { CircleSlash2, Download, File, FileText, TimerOff, Users2, Youtube } from 'lucide-svelte';
+	import fileIcon from '$lib/images/file.png';
 
 	$: threeStudents = $studentsBySection?.slice(0, 3);
 	$: threeSections = $sections?.slice(0, 3);
 	$: threeSubjects = $subjects?.slice(0, 3);
+	$: threeResources = $selectedResources?.slice(0, 3) ?? [];
 </script>
 
 <div class="grid md:grid-cols-2 p-4 md:p-8 gap-4 md:gap-8">
@@ -65,6 +67,35 @@
 					</div>
 				{/each}
 			</div>
+		{/if}
+	</a>
+	<a
+		href="/admin/resources"
+		class="flex flex-col bg-base-300 rounded-lg shadow-lg p-4 hover:drop-shadow-[0_0_4px_#3d98ff]"
+	>
+		<h4 class="text-xl font-semibold">Resources</h4>
+		<div class="divider" />
+		{#if threeResources.length > 0}
+			<div class="flex flex-col gap-4">
+				{#each threeResources as resource}
+					<div class="flex items-center gap-4">
+						{#if resource.type === 'link'}
+							<Youtube />
+						{:else}
+							<File />
+						{/if}
+						<p class="text-lg font-semibold">
+							"{resource.title}"
+						</p>
+						<p class="link">{resource.filename}</p>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<span class="flex gap-2 items-center text-lg">
+				<CircleSlash2 size={18} />
+				Empty
+			</span>
 		{/if}
 	</a>
 	<a

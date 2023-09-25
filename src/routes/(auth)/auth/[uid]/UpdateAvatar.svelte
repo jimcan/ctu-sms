@@ -5,6 +5,7 @@
 
 	export let photoUrl = '';
 	export let imgName = '';
+	export let section = '';
 
 	let dialog: HTMLDialogElement;
 	let input: HTMLInputElement;
@@ -37,7 +38,7 @@
 
 			const filename = `${imgName}.${imgFile.type.split('/')[1]}`;
 			imgFile = new File([imgFile], filename, { type: imgFile.type });
-			const { url } = await upload(imgFile);
+			const { url } = await upload(imgFile, `avatars/${section}`);
 
 			if (url) {
 				const uid = $page.data.userSession?.uid;
@@ -53,11 +54,7 @@
 	};
 
 	const onOpen = () => {
-		const im = imgName.trim().split('/');
-		const sec = im.at(0);
-		const n = im.at(1);
-
-		if (im.length < 2 || !sec || sec === '' || !n || n === '')
+		if (!imgName || !section || imgName === '' || section === '')
 			return alert('Set your name and section first!');
 		dialog.showModal();
 	};

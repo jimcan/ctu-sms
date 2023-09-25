@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { selectedSection, selectedUid, studentsBySection } from '$lib/stores/admin';
-	import { sections } from '$lib/stores';
 	import { cn, toName } from '$lib/utils.js';
 
 	function onSelect(s: Student) {
@@ -14,20 +13,8 @@
 <div class={cn('flex flex-col')}>
 	<div class={cn('flex justify-between', 'p-4', 'bg-base-300')}>
 		<div class="form-control">
-			<label for="section" class="label">Section</label>
-			<select
-				class="select"
-				name="section"
-				value={$selectedSection}
-				on:change={(e) => selectedSection.set(e.currentTarget.value)}
-			>
-				<option value="All">All</option>
-				{#each $sections as section}
-					<option value={section.uid}>
-						{section.name}
-					</option>
-				{/each}
-			</select>
+			<label for="sec" class="label">Section</label>
+			<input type="text" disabled name="sec" class="input w-40" value={$selectedSection} />
 		</div>
 		<div class="form-control">
 			<label for="no" class="label">Number of students</label>

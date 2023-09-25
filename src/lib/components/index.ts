@@ -9,3 +9,6 @@ export { default as Theme } from './Theme.svelte';
 export { Input } from './ui/input';
 export { LabeledInput } from './ui/labeled-input';
 export { LabeledSelect } from './ui/labeled-select';
+export { Select } from './ui/select';
+export { default as YoutubeVideo } from './YoutubeVideo.svelte';
+export { default as Only } from './Only.svelte';

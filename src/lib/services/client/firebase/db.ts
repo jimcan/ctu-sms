@@ -22,9 +22,9 @@ export async function saveDocument<T extends AnyObject>(col: string, data: T) {
 	try {
 		const colRef = collection(db, col);
 
-		if (data.uid) {
-			const uid = data.uid;
-			delete data.uid;
+		const uid: string | undefined = data.uid;
+		delete data.uid;
+		if (uid) {
 			await setDoc(doc(colRef, uid), data);
 		} else {
 			await addDoc(colRef, data);

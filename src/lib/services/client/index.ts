@@ -1,4 +1,4 @@
 export { signinWithGoogle, signOut } from './firebase/auth';
 export { app, auth, db, initFirebase, storage } from './firebase/config';
 export { updateDocument, deleteDocument, saveDocument } from './firebase/db';
-export { upload } from './firebase/storage';
+export { uploadFile as upload } from './firebase/storage';
