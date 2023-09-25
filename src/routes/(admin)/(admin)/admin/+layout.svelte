@@ -22,8 +22,8 @@
 	let checked = false;
 
 	$: selectedUid.set(data.userSession.uid);
-	$: selectedSection.set($currentSchedule?.section ?? 'All');
-	$: selectedSubject.set($currentSchedule?.subject ?? $subjects.at(0)?.uid);
+	$: if (!$selectedSection) selectedSection.set($currentSchedule?.section);
+	$: if (!$selectedSubject) selectedSubject.set($currentSchedule?.subject);
 
 	onMount(() => {
 		const cleanup = onSnapshot(query(collection(db, 'students'), orderBy('lastname')), (ss) => {
