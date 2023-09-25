@@ -51,12 +51,19 @@
 
 		dialog.close();
 	};
+
+	const onOpen = () => {
+		const im = imgName.trim().split('/');
+		const sec = im.at(0);
+		const n = im.at(1);
+
+		if (im.length < 2 || !sec || sec === '' || !n || n === '')
+			return alert('Set your name and section first!');
+		dialog.showModal();
+	};
 </script>
 
-<button
-	class="btn btn-xs btn-ghost btn-circle absolute top-0 right-0"
-	on:click={() => dialog.showModal()}
->
+<button class="btn btn-xs btn-ghost btn-circle absolute top-0 right-0" on:click={onOpen}>
 	<Pen size={18} />
 </button>
 <dialog bind:this={dialog} class="modal">

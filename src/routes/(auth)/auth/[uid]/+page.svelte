@@ -28,14 +28,16 @@
 	}
 
 	$: student = $currentStudent;
-	$: student && setInitialValues();
+	$: student, setInitialValues();
 
 	const setInitialValues = () => {
-		fname = student?.firstname ?? '';
-		lname = student?.lastname ?? '';
-		idNumber = student?.idNumber?.toString() ?? '';
-		sectionCode = student?.sectionCode ?? '';
-		subjectCodes = student?.subjectCodes ?? [];
+		if (student) {
+			fname = student.firstname ?? '';
+			lname = student.lastname ?? '';
+			idNumber = student.idNumber?.toString() ?? '';
+			sectionCode = student.sectionCode ?? '';
+			subjectCodes = student.subjectCodes ?? [];
+		}
 	};
 
 	const handleSubmit = async () => {
@@ -80,7 +82,7 @@
 			<div class="flex flex-col items-center p-8 gap-2 h-full justify-center">
 				<div class="flex relative">
 					<Avatar {student} size="4xl" outline="accent" />
-					<UpdateAvatar photoUrl={student?.photoUrl} imgName="{sectionCode}/{name}" />
+					<UpdateAvatar photoUrl={student?.photoUrl} imgName="{sectionCode}/{fname} {lname}" />
 				</div>
 				<p class="md text-lg text-center">{data.userSession.email}</p>
 				<button class="btn btn-outline" on:click={onSignOut}><LogOut size={18} /> Sign out</button>
